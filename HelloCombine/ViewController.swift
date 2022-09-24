@@ -15,6 +15,9 @@ class ViewController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    // MARK: - 9. Sending Notifications Using Publisher and Subscriber
+    // MARK: - 10. Understanding Cancellable
     // functional programming
     let notification = Notification.Name("MyNotification")
     let publisher = NotificationCenter.default.publisher(for: notification, object: nil)
@@ -28,13 +31,28 @@ class ViewController: UIViewController {
       .observe(on: MainScheduler.instance)
       .subscribe(onNext: { _ in
         print("RxSwift Notification received")
-      }).disposed(by: disposeBag)
+      })
     
     let subscription = publisher.sink { _ in
       print("Combine Notification received")
     }
     
+    // 구독 중의 이벤트는 받을 수 있다. 구독한 Observable, Publisher의 이벤트를 전달 받는다.
     NotificationCenter.default.post(name: notification, object: nil)
+    
+    // News Paper를 예로 들어보자. 구독을 하다가, 취소를 해야 신물을 그만 볼 수 있다.
+    // Tuesday -> Delivered
+    // Wednesday -> Delivered
+    // Thursday -> Delivered
+    // AnyCancellable의 cancel()을 통해 구독을 취소할 수 있다.
+    disposable.dispose()
+    subscription.cancel()
+    
+    // 구독 취소 후의 Observable, Publiisher 이벤트는 받을 수 없다.
+    NotificationCenter.default.post(name: notification, object: nil)
+    
+    
+    
     
     // imparative programming (명령형 프로그래밍) 예시
     /*
