@@ -8,6 +8,37 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Combine
+
+class StringSubscriber: Subscriber {
+  // Publisher            Subscriber 의 상호 관계
+  // <-------- subscribes
+  //         gives subscription -->
+  // <-------- requests values
+  //         sends values -------->
+  //         sends completion ---->
+  
+  // subscribe 이후, publisher로부터 subscription을 수신했을때 호출 됩니다.
+  func receive(subscription: Subscription) {
+    print("Received Subscription")
+    subscription.request(.max(3)) // publiser야 최대 3개의 값만 줘봐
+  }
+  
+  // publisher로부터 input 값을 수신했을때 호출됩니다.
+  func receive(_ input: String) -> Subscribers.Demand {
+    print("Received value : \(input)")
+    return .none // publisher한테 더이상 받을 것 없어
+//    return .unlimited // 줄 수 있는거 다 받을래
+  }
+  
+  // publisher가 publish 이벤트를 마쳤을때 호출 됩니다.
+  func receive(completion: Subscribers.Completion<Never>) {
+    print("Completed")
+  }
+
+  typealias Input = String
+  typealias Failure = Never // Failure를 Never로 지정하면 fail이 발생하지 않습니다.
+}
 
 class ViewController: UIViewController {
   
@@ -16,9 +47,22 @@ class ViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    let publisher = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"].publisher
+    let subscriber = StringSubscriber()
+    publisher.subscribe(subscriber)
+    // 출력 결과 -> .max(3)으로 request를 했으므로 "A", "B", "C" 세개의 이벤트를 받습니다.
+    // * unlimited로 input을 받는 경우, 모든 이벤트를 받습니다.
+    /*
+    Received Subscription
+    Received value : A
+    Received value : B
+    Received value : C
+     */
+
     // MARK: - 9. Sending Notifications Using Publisher and Subscriber
     // MARK: - 10. Understanding Cancellable
     // functional programming
+    /*
     let notification = Notification.Name("MyNotification")
     let publisher = NotificationCenter.default.publisher(for: notification, object: nil)
     NotificationCenter.default.post(name: notification, object: nil)
@@ -50,10 +94,8 @@ class ViewController: UIViewController {
     
     // 구독 취소 후의 Observable, Publiisher 이벤트는 받을 수 없다.
     NotificationCenter.default.post(name: notification, object: nil)
-    
-    
-    
-    
+    */
+
     // imparative programming (명령형 프로그래밍) 예시
     /*
     let notification = Notification.Name("MyNotification")
