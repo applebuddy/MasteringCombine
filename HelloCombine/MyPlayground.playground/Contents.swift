@@ -1,8 +1,21 @@
 import UIKit
 import Combine
 
+// MARK: 23. scan operator
+// RxSwift의 scan와 이름이 동일하고 기능도 유사한 operator로 Sequence의 연산 결과를 모두 반환한다.
+/*
+let publisher = (1...10).publisher
+publisher.scan([]) { numbers, value -> [Int] in
+// numbers: [Int]에 연산이 누적된다., value: Int 는 publisher의 각각의 element
+  return numbers + [value] // publisher 값을 순차적으로 append 하고 있다.
+}.sink { scanValue in
+  print(scanValue) // scan operator의 appending 연산 과정이 모두 출력된다.
+}
+ */
+
 // MARK: 22. replaceEmpty operator
 // Empty<Int, Never> Publisher는 어떠한 값을 방출하지 않으며, 에러또한 방출하지 않습니다.
+/*
 let empty = Empty<Int, Never>()
 //let cancellable = [1, 2, 3, 4, 5].publisher.sink { print($0) }
 //cancellable.cancel()
@@ -14,6 +27,7 @@ empty
 }, receiveValue: {
   print($0)
 })
+*/
 
 // MARK: 19. replaceNil operator
 // replaceNil : publiser sequence에 nil이 있을 경우 nil을 특정 값으로 변환한 sequence를 반환합니다.
