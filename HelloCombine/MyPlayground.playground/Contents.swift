@@ -1,10 +1,49 @@
 import UIKit
 import Combine
 
+// MARK: 32. dropUntilOutputFrom operator
+// dropUntilOutputFrom operator는 특정 publisher(untilOutputFrom의 인자)로부터 이벤트를 받기 전까지 이벤트를 무시한다.
+/*
+let taps = PassthroughSubject<Int, Never>()
+let isReady = PassthroughSubject<Void, Never>()
+taps.drop(untilOutputFrom: isReady)
+  .sink(receiveValue: {
+    print($0)
+  })
+
+// isReady publisher가 이벤트 방출하기 전까지 taps subject의 이벤트는 무시됩니다.
+// isReady subject(publisher)가 이벤트를 방출한 이후부터 tap subject의 이벤트가 방출됩니다.
+(1...10).forEach { n in
+  if n == 6 { isReady.send(()) }
+  taps.send(n) // isReady가 이벤트를 방출한 이후부터 tap subject(publisher)는 이벤트를 방출합니다.
+}
+ */
+
+// MARK: 31. dropWhile operator
+// dropWhile은 Sequence에서 특정 조건을 충족하는 동안은 이벤트를 무시하고 조건에 부합되지 않는 이벤트부터 이벤트를 방출한다.
+/*
+let numbers = (1...10).publisher
+numbers.drop(while: { $0 != 3 }) // 1, 2는 3이 아니므로 무시되며, 3부터 이후의 이벤트가 방출된다.
+  .sink {
+    print($0)
+  }
+*/
+
+// MARK: 30. dropFirst operator
+// dropFirst는 Sequence에서 최초 N개의 이벤트를 무시하고자할때 사용가능하다.
+/*
+let numbers = (1...10).publisher
+numbers.dropFirst(5)
+  .sink {
+    print($0) // 5개 이벤트를 무시하고 6 ~ 10 의 값이 방출된다.
+  }
+ */
+
 // MARK: 28. first operator
 // first operator는 Sequence의 첫번째 혹은 특정 조건에 맞는 첫번째 값을 방출할때 사용할 수 있습니다.
 // MARK: 29. last operator
 // last operator는 Sequence의 마지막 혹은 특정 조건에 맞는 마지막 값을 방출할때 사용할 수 있습니다.
+/*
 let numbers = (1...9).publisher
 
 numbers.first(where: { $0 % 2 == 0 }) // 짝수인 첫번째 값을 방출
@@ -16,6 +55,7 @@ numbers.last(where: { $0 % 2 == 1 }) // 홀수인 마지막 값을 방출
   .sink {
     print($0) // 9 (sequence publisher의 마지막 홀수 값)
   }
+ */
 
 // MARK: 27. ignoreOutput operator
 // ignoreOutput operator는 completion event만 받고 그 이외의 이벤트는 무시하고자 할 때 사용 가능합니다.
