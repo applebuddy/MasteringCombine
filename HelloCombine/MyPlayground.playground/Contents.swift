@@ -1,6 +1,26 @@
 import UIKit
 import Combine
 
+// MARK: 25. removeDuplicates operator
+// removeDuplicates operator를 사용하면 Sequence의 중복값을 제거한 Sequence로 반환받을 수 있다.
+// removeDuplicates를 사용할때 모든 중복값이 제거되는 것은 아니다. Sequence에서 연속된 중복값만 한하여 무시하여 필터링한다.
+// 중복 문자열이 있는 배열에 대한 publisher를 선언한다.
+let words = "apple apple fruit apple mango watermelon apple".components(separatedBy: " ").publisher
+  .removeDuplicates()
+words.sink {
+  print($0)
+}
+
+// MARK: - Section 4. Filtering Operators
+// MARK: 24. filter operator
+/*
+// RxSwift의 filter와 동일하다. 기존 Sequence를 특정 조건을 충족하는 값만 있는 Sequence로 반환한다.
+let numbers = (1...20).publisher
+numbers.filter { $0 % 2 == 0 }.sink(receiveValue: {
+  print($0) // (1...20) 값들 중 짝수값만 출력된디ㅏ.
+})
+ */
+
 // MARK: 23. scan operator
 // RxSwift의 scan와 이름이 동일하고 기능도 유사한 operator로 Sequence의 연산 결과를 모두 반환한다.
 /*
