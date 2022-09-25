@@ -1,15 +1,26 @@
 import UIKit
 import Combine
 
+// MARK: 26. compactMap operator
+// compactMap operator는 map과 유사한 동작을 하지만 연산 결과가 non-optional인 값만 모아서 Sequence로 반환하는 차이점이 있다. 즉, compactMap operator는 non-optional Sequence로 반환한다.
+
+let strings = ["a", "1.24", "b", "3.45", "6.7"]
+  .publisher.compactMap { Float($0) }
+  .sink {
+    print($0)
+  }
+
 // MARK: 25. removeDuplicates operator
 // removeDuplicates operator를 사용하면 Sequence의 중복값을 제거한 Sequence로 반환받을 수 있다.
 // removeDuplicates를 사용할때 모든 중복값이 제거되는 것은 아니다. Sequence에서 연속된 중복값만 한하여 무시하여 필터링한다.
 // 중복 문자열이 있는 배열에 대한 publisher를 선언한다.
+/*
 let words = "apple apple fruit apple mango watermelon apple".components(separatedBy: " ").publisher
   .removeDuplicates()
 words.sink {
   print($0)
 }
+ */
 
 // MARK: - Section 4. Filtering Operators
 // MARK: 24. filter operator
