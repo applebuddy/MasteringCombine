@@ -1,6 +1,25 @@
 import UIKit
 import Combine
 
+// MARK: 33. prefix(_:), prefix(while:) operator
+// 1) prefix operator는 Sequence의 첫번째부터 N개의 이벤트만 방출하도록 할때 사용합니다.
+// 2) prefix(while:) operator는 특정 조건을 충족하지 않는 이벤트가 나오기 전까지의 prefix event를 방출합니다.
+
+let numbers = (1...10).publisher
+print("What is the prefix operator in Combine?")
+numbers
+  .prefix(3) // 1, 2, 3
+  .sink { element in
+    print(element)
+  }
+
+print("Next, Let's go to learn How to use prefix(while:) operator!")
+numbers
+  .prefix(while: { $0 % 3 != 0 })
+  .sink {
+    print($0)
+  }
+
 // MARK: 32. dropUntilOutputFrom operator
 // dropUntilOutputFrom operator는 특정 publisher(untilOutputFrom의 인자)로부터 이벤트를 받기 전까지 이벤트를 무시한다.
 /*
