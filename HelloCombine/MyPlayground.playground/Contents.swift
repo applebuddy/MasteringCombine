@@ -1,10 +1,32 @@
 import UIKit
 import Combine
 
+// MARK: 34 ~ 35. Challenge: Filter all the things with solution
+/*
+Challenge: Filter all the things
+
+Create an example that publishes a collection of numbers from 1 through 100, and use filtering operators to:
+
+1. Skip the first 50 values emitted by the upstream publisher.
+2. Task the next 20 values after those first 50 values.
+3. Only task even numbers.
+
+The output of your example should produce the follwing numbers, one per line:
+*/
+
+let publisher = (1...100).publisher
+publisher
+  .dropFirst(50) // or, drop(while: { $0 <= 50 }), 1) 처음 50개의 이벤트는 무시합니다.
+  .prefix(20) // 50개 이벤트 버린 후, 처음 20개의 이벤트는 방출합니다.
+  .filter({ $0 & 1 == 0 }) // 방출하는 20개 이벤트 중, 짝수만 방출합니다.
+  .sink(receiveValue: {
+    print($0)
+  })
+
 // MARK: 33. prefix(_:), prefix(while:) operator
 // 1) prefix operator는 Sequence의 첫번째부터 N개의 이벤트만 방출하도록 할때 사용합니다.
 // 2) prefix(while:) operator는 특정 조건을 충족하지 않는 이벤트가 나오기 전까지의 prefix event를 방출합니다.
-
+/*
 let numbers = (1...10).publisher
 print("What is the prefix operator in Combine?")
 numbers
@@ -19,6 +41,7 @@ numbers
   .sink {
     print($0)
   }
+ */
 
 // MARK: 32. dropUntilOutputFrom operator
 // dropUntilOutputFrom operator는 특정 publisher(untilOutputFrom의 인자)로부터 이벤트를 받기 전까지 이벤트를 무시한다.
