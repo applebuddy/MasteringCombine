@@ -1,16 +1,32 @@
 import UIKit
 import Combine
 
+// MARK: 22. replaceEmpty operator
+// Empty<Int, Never> Publisher는 어떠한 값을 방출하지 않으며, 에러또한 방출하지 않습니다.
+let empty = Empty<Int, Never>()
+//let cancellable = [1, 2, 3, 4, 5].publisher.sink { print($0) }
+//cancellable.cancel()
+
+empty
+  .replaceEmpty(with: 1) // replaceEmpty operator를 통해 Empty Publisher의 값을 특정 값으로 바꾸어 구독자에게 전달 가능
+  .sink(receiveCompletion: {
+  print($0) // 1, finiished
+}, receiveValue: {
+  print($0)
+})
+
 // MARK: 19. replaceNil operator
 // replaceNil : publiser sequence에 nil이 있을 경우 nil을 특정 값으로 변환한 sequence를 반환합니다.
 // MARK: 20. Challenge - Unwrapping the Optional Values Received from replaceNil
 // Q. replaceNil이 반환하는 [String?] 타입 대신 [String] 타입이 내려오게 하는 방법은?
 // 1) map { $0! } 을 사용하여 언래핑을 할 수 있다. 강제 옵셔널 언래핑은 안전하지 않은 방법이다. 하지만 replaceNiil을 통해 nil인 값을 다른 값으로 바꾸었기 때문에 정상적으로 언래핑 후 값이 출력된다.
+/*
 ["A", "B", nil, "C"].publisher.replaceNil(with: "x")
   .map { $0! }
   .sink {
     print($0)
   }
+*/
 
 // MARK: 18. flatMap operator
 // flatMap operator는 많은 transformation operator들 중 중요한 operator 중 하나입니다.
