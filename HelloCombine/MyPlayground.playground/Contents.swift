@@ -1,9 +1,21 @@
 import UIKit
 import Combine
 
+// MARK: 19. replaceNil operator
+// replaceNil : publiser sequence에 nil이 있을 경우 nil을 특정 값으로 변환한 sequence를 반환합니다.
+// MARK: 20. Challenge - Unwrapping the Optional Values Received from replaceNil
+// Q. replaceNil이 반환하는 [String?] 타입 대신 [String] 타입이 내려오게 하는 방법은?
+// 1) map { $0! } 을 사용하여 언래핑을 할 수 있다. 강제 옵셔널 언래핑은 안전하지 않은 방법이다. 하지만 replaceNiil을 통해 nil인 값을 다른 값으로 바꾸었기 때문에 정상적으로 언래핑 후 값이 출력된다.
+["A", "B", nil, "C"].publisher.replaceNil(with: "x")
+  .map { $0! }
+  .sink {
+    print($0)
+  }
+
 // MARK: 18. flatMap operator
 // flatMap operator는 많은 transformation operator들 중 중요한 operator 중 하나입니다.
 // flatMap operator를 사용하면 다수의 업 스트림 publisher들을 하나의 downstream publisher로 변환할 수 있습니다.
+/*
 struct School {
   let name: String
   let noOfStudents: CurrentValueSubject<Int, Never>
@@ -16,6 +28,7 @@ struct School {
 
 let citySchool = School(name: "Fountain Head School", noOfStudents: 100)
 let school = CurrentValueSubject<School, Never>(citySchool)
+
 /*
 school.sink {
   // 구독하면서 초기 School 값 수신
@@ -33,7 +46,6 @@ let anyCancellable = school.flatMap {
   print($0)
 }
 
-
 let townSchool = School(name: "Town School", noOfStudents: 101)
 // citySchool.noOfStudents.value += 1 // noOfStudyents.value를 바꾸어도 이벤트가 방출되지 않음
 
@@ -42,6 +54,8 @@ school.value = townSchool // 구독한 school CurrentValueSubject의 value를 �
 townSchool.noOfStudents.value = 0
 townSchool.noOfStudents.value += 100
 townSchool.noOfStudents.value -= 100
+ 
+ */
 
 // MARK: 17. map KeyPath
 // map operator에서 KeyPath를 사용하여 structure의 개별 값들을 접근하여 다룰 수 있습니다.
