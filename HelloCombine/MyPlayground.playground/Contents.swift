@@ -1,6 +1,21 @@
 import UIKit
 import Combine
 
+// MARK: 28. first operator
+// first operator는 Sequence의 첫번째 혹은 특정 조건에 맞는 첫번째 값을 방출할때 사용할 수 있습니다.
+// MARK: 29. last operator
+// last operator는 Sequence의 마지막 혹은 특정 조건에 맞는 마지막 값을 방출할때 사용할 수 있습니다.
+let numbers = (1...9).publisher
+
+numbers.first(where: { $0 % 2 == 0 }) // 짝수인 첫번째 값을 방출
+  .sink {
+    print($0) // 2 (sequence publisher의 첫번째 홀수 값
+  }
+
+numbers.last(where: { $0 % 2 == 1 }) // 홀수인 마지막 값을 방출
+  .sink {
+    print($0) // 9 (sequence publisher의 마지막 홀수 값)
+  }
 
 // MARK: 27. ignoreOutput operator
 // ignoreOutput operator는 completion event만 받고 그 이외의 이벤트는 무시하고자 할 때 사용 가능합니다.
