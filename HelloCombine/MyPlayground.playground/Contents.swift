@@ -1,14 +1,29 @@
 import UIKit
 import Combine
 
+
+// MARK: 27. ignoreOutput operator
+// ignoreOutput operator는 completion event만 받고 그 이외의 이벤트는 무시하고자 할 때 사용 가능합니다.
+/*
+let numbers = (1...5000).publisher
+numbers
+  .ignoreOutput() // ignoreOutput operator를 사용하면 completion 이벤트만 받고 이외의 이벤트는 무시합니다.
+  .sink {
+  print($0) // finished Completion만 전달 받습니다.
+} receiveValue: {
+  print($0) // 1...5000의 값은 출력되지 않습니다.
+}
+*/
+
 // MARK: 26. compactMap operator
 // compactMap operator는 map과 유사한 동작을 하지만 연산 결과가 non-optional인 값만 모아서 Sequence로 반환하는 차이점이 있다. 즉, compactMap operator는 non-optional Sequence로 반환한다.
-
+/*
 let strings = ["a", "1.24", "b", "3.45", "6.7"]
   .publisher.compactMap { Float($0) }
   .sink {
     print($0)
   }
+ */
 
 // MARK: 25. removeDuplicates operator
 // removeDuplicates operator를 사용하면 Sequence의 중복값을 제거한 Sequence로 반환받을 수 있다.
