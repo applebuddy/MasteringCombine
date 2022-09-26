@@ -1,6 +1,40 @@
 import UIKit
 import Combine
 
+// MARK: 37. append operator
+// append opeartor는 prepend와 반대로 Sequence 끝에 이벤트를 추가할 때 사용합니다.
+// prepend처럼 다른 publisher를 append operator 인자로 사용 가능합니다.
+let numbers = (1...10).publisher
+let publisher2 = (100...101).publisher
+let publisher3 = [-1].publisher
+numbers
+  .append(99, 98, 97)
+  .append(-30, -20, -10)
+  .append(publisher2)
+  .append(publisher3)
+  .sink {
+  print($0)
+}
+
+
+// MARK: - Section 5. Combining Operators
+// MARK: 36. prepend operator
+// prepend operator는 append와 반대로 Sequence 앞에 이벤트를 추가시킬 때 사용합니다.
+// Sequence publisher를 인자로 넣어서 사용할 수도 있습니다.
+/*
+let numbers = (1...5).publisher
+let publisher2 = (500...510)
+let publisher3 = [0].publisher
+numbers
+  .prepend(-20, -30)
+  .prepend(100, 200, 300)
+  .prepend(publisher2)
+  .prepend(publisher3)
+  .sink {
+  print($0)
+}
+ */
+
 // MARK: 34 ~ 35. Challenge: Filter all the things with solution
 /*
 Challenge: Filter all the things
@@ -13,7 +47,7 @@ Create an example that publishes a collection of numbers from 1 through 100, and
 
 The output of your example should produce the follwing numbers, one per line:
 */
-
+/*
 let publisher = (1...100).publisher
 publisher
   .dropFirst(50) // or, drop(while: { $0 <= 50 }), 1) 처음 50개의 이벤트는 무시합니다.
@@ -22,6 +56,7 @@ publisher
   .sink(receiveValue: {
     print($0)
   })
+ */
 
 // MARK: 33. prefix(_:), prefix(while:) operator
 // 1) prefix operator는 Sequence의 첫번째부터 N개의 이벤트만 방출하도록 할때 사용합니다.
