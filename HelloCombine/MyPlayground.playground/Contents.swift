@@ -1,9 +1,86 @@
 import UIKit
 import Combine
 
+// MARK: 39. switchToLatest continued
+// switchToLatest operator에 대한 실 사용 예시를 알아보자.
+// switchToLatest operator를 활용하면 버튼을 탭하고, 탭 이벤트 이후 이미지를 요청해서 받아올때, 가장 최근에 선택한 index(상태)에 대한 이미지를 불러올 수 있다.
+let images = ["Houston", "Denver", "Seattle"]
+var index = 0
+
+func getImage() -> AnyPublisher<UIImage?, Never> {
+  print("getImage calling")
+  return Future<UIImage?, Never> { promise in
+    print("getImage promise closure")
+    DispatchQueue.global().asyncAfter(deadline: .now() + 3.0) {
+      print("image callback fired")
+      promise(.success(UIImage(named: images[index]))) // 비동기적으로 약 3초 후 선택된 인덱스에 맞는 이미지를 콜백으로 전달한다.
+    }
+  } // -> Future<UIImage?, Never>
+  .map { $0 } // -> UIImage?
+  .receive(on: RunLoop.main)
+  .eraseToAnyPublisher() // -> AnyPublisher<UIImage?, Never>
+}
+
+let taps = PassthroughSubject<Void, Never>() // 버튼 탭 예시로 사용되는 subject publisher
+let subscription = taps.map { _ in getImage() }
+  .print()
+  .switchToLatest().sink {
+    print($0)
+  }
+
+// getImage 메서드는 3초뒤 이미지를 전달한다.
+
+// 1) houston index(0)일때는 바로 이벤트를 보낸다. 3초 뒤, index는 그대로 0이므로 houston에 대한 이미지를 받는다.
+taps.send() // tap action
+
+// 2) 이후 6초 뒤에 실행된느 비동기 코드
+DispatchQueue.main.asyncAfter(deadline: .now() + 6.0, execute: {
+  // 3) 6초 뒤, index += 1 후 index는 1이 된다.
+  // 4) 이어서 tap 이벤트가 발생한다. 3초 뒤 이미지를 받을 것이다.
+  index += 1
+  taps.send()
+})
+
+// seattle index(2)일때는 6.5초 뒤에 이벤트를 보낸다.
+DispatchQueue.main.asyncAfter(deadline: .now() + 6.5, execute: {
+  // 5) 6.5초 뒤 index가 한번더 증가한다. index == 2 이다.
+  // 6) 4)에서 발생한 tap 이벤트에 대한 getImage 콜벡을 수신한다. 이때 index는 2이므로, Denver가 아닌 Seattle에 대한 이미지를 받게된다.
+  //    index가 1인 시점에서 getImage 메섣르르 호출했지만, image 콜벡을 받는 3초 동안 이미 index가 2로 바뀌었기 때문에, index == 2 이미지인 Seattle 이미지를 이벤트로 받게 된다.
+  //
+  index += 1
+  taps.send()
+})
+
+// Denver에 대한 이미지 요청은 6초 이후 전달되었지만, 추가로 3초 후 이미지가 전달 되기 전에 index가 다시 증가하여 Seattle에 대한 index가 되었으므로
+// Denver가 아닌 최근 index에 대한 이미지인 Seattle 이미지를 받게 된다. 이처럼 switchToLatest operator는 가장 최근 상태에 대한 이벤트를 받고 싶을때 사용할 수 있다.
+
+// MARK: 38. switchToLatest operator
+// switchToLatest operator는 가장 최근 방출한 publisher에 대한 이벤트를 받고자할때 사용합니다.
+// ex) 가장 최근에 publisherA 이벤트 방출했다면, publisherA가 방출한 이벤트만 받는다.
+/*
+let publisher = PassthroughSubject<String, Never>()
+let publisher2 = PassthroughSubject<String, Never>()
+let publishers = PassthroughSubject<PassthroughSubject<String, Never>, Never>()
+publishers.switchToLatest().sink {
+  print($0)
+}
+
+// publisher를 방출하면 publisher가 방출하는 이벤트만 수신 가능하다.
+publishers.send(publisher) // switching to publisher
+publisher.send("Publisher - A")
+publisher.send("Publisher - B")
+publishers.send(publisher2)
+// publishers가 가장 최근에 publisher2를 방출했으므로 publisher2가 아닌 publisher에서 방출된 이벤트는 수신하지 못한다.
+publisher.send("Publisher - C") // switcing to publisher2
+// publishers에서 가장 최근 방출된 publisher2에 대한 이벤트를 수신 가능하다.
+publisher2.send("Publisher2 - A")
+publisher2.send("Publisher2 - B")
+ */
+
 // MARK: 37. append operator
 // append opeartor는 prepend와 반대로 Sequence 끝에 이벤트를 추가할 때 사용합니다.
 // prepend처럼 다른 publisher를 append operator 인자로 사용 가능합니다.
+/*
 let numbers = (1...10).publisher
 let publisher2 = (100...101).publisher
 let publisher3 = [-1].publisher
@@ -15,7 +92,7 @@ numbers
   .sink {
   print($0)
 }
-
+*/
 
 // MARK: - Section 5. Combining Operators
 // MARK: 36. prepend operator
