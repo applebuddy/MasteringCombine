@@ -1,9 +1,40 @@
 import UIKit
 import Combine
 
+// MARK: 48. allSatisfy operator
+// 1) allSatisfy operator는 특정 조건을 Sequence의 모든 값이 충족하고 있는지를 봅니다.
+// 2) allSatisfy 사용 시 모든 값이 조건을 충족하면 true, 아니면 false를 반환합니다.
+let publisher = [1, 2, 3, 4, 5, 6, 7].publisher
+let publisher2 = [1, 3, 5, 7, 9].publisher
+publisher.allSatisfy { $0 % 2 == 0 }.sink { // publisher의 Sequence 모든 값이 짝수인가?
+  print($0) // 모두 짝수가 아니므로 false입니다.
+}
+
+publisher2.allSatisfy { $0 & 1 == 1 }.sink { // publisher2 Sequence의 모든 값이 홀수인가?
+  print($0) // publisher2 Sequence valus 가 odd number 이므로 true입니다.
+}
+
+// MARK: 47. contains operator
+// contains operator는 특정 값이 포함되었는지를 확인할때 사용하며, 포함여부를 Boolean으로 반환합니다.
+/*
+let publisher = ["A", "B", "C", "D"].publisher
+publisher.contains("C").sink { // 특정 이벤트 값이 포함되어있는지를 Bool 타입으로 반환합니다.
+  print($0)
+}
+
+publisher.contains("Z").sink {
+  print($0)
+}
+
+publisher.contains(where: { $0 == "A" }).sink {
+  print($0)
+}
+ */
+
 // MARK: 46. count operator
 // 'How many values will be emitted by the publisher?'
 // count operator는 publisher에서 방출되는 값의 갯수를 반환할때 사용합니다.
+/*
 let publisher = ["A", "B", "C", "D", "E"].publisher
 let publisher2 = PassthroughSubject<Int, Never>()
 
@@ -21,6 +52,7 @@ publisher2.send(5)
 // subject의 경우, completed 이벤트가 발생하기 전까지 count 결과를 알 수 없습니다.
 // subject의 경우, completed 이벤트 발생 후, 지금까지 방출한 값의 갯수가 내려온다.
 publisher2.send(completion: .finished)
+ */
 
 // MARK: 45. output operator
 // output operator 는 Sequence publisher의 특정 인덱스 혹은 범위의 이벤트를 방출받을때 사용합니다.
