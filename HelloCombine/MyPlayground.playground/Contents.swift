@@ -1,10 +1,27 @@
 import UIKit
 import Combine
 
+// MARK: Section 8. Debugging Combine
+// MARK: 53. Printing events
+// print operator는 디버깅에 사용하는 operator로 인자로 디버깅 레이블을 넣어서 출력할 수도 있다.
+// print operator를 현재 이벤트 동작 방식을 확인할때 사용할 수 있다.
+// ex) Debugging: receive subscription: (1...20)
+//     Debugging: request unlimited
+//     Debugging: receive value: (18)
+//     Debugging: receive finished
+/*
+let publisher = (1...20).publisher
+publisher
+  .print("Debugging") // print 인자로 디버깅 식별자를 넣고, 디버깅 로그를 출력할 수 있다.
+  .sink {
+    print($0)
+  }
+ */
+
 // MARK: - 50. URLSession extensions
 // Combine framework를 활용하여 get api request, response 네트워킹에 사용할 URLSession extension을 구성해봅니다.
 // MARK: - 51. Codable support
-
+/*
 struct Post: Codable {
   // * 만약 실제 json 필드명과 변수명이 다르면 CodongKey을 사용해서 실제 필드명을 매핑해주어야 합니다.
   let title: String
@@ -31,6 +48,7 @@ let cancellable = getPosts().sink(receiveCompletion: { _ in
   print("receiveValue closure called")
   print($0)
 })
+ */
 
 // MARK: 49. reduce operator
 // reduce operator는 초깃값을 지정 후 Sequence publisher의 값들에 대한 연산을 누적시킨 결과 값을 반환할 때 사용합니다.
