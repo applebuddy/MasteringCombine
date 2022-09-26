@@ -1,6 +1,26 @@
 import UIKit
 import Combine
 
+// MARK: 41. combineLatest operator
+// combineLatest는 RxSwift와 이름 동작이 모두 유사합니다.
+// 1) 두개의 publisher 최신 값을 이벤트로 방출합니다.
+// 2) 둘 중 어느 하나의 이벤트가 방출될때마다 각 publisher의 최신값을 방출합니다.
+// 3) 서로 다른 값 타입의 publisher들에 대해서도 combineLatest operator를 사용하여 최신 이벤트를 전달받을 수 있습니다.
+let publisher1 = PassthroughSubject<Int, Never>()
+let publisher2 = PassthroughSubject<String, Never>()
+publisher1.combineLatest(publisher2)
+  .sink {
+    print("P1: \($0), P2: \($1)")
+  }
+publisher1.send(1) // nothing
+publisher1.send(2) // nothing
+
+publisher2.send("A") // 2, "A"
+publisher2.send("B") // 2, "B"
+
+publisher1.send(3) // 3, "B"
+
+
 // MARK: 40. merge operator
 /*
 // merge operator는 두개의 publisher를 합쳐서 사용할 수 있고, 각각의 publisher의 이벤트를 합쳐서 시간순으로 받을 수 있다.
