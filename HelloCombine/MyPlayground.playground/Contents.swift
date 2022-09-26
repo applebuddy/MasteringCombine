@@ -1,8 +1,30 @@
 import UIKit
 import Combine
 
+// MARK: 46. count operator
+// 'How many values will be emitted by the publisher?'
+// count operator는 publisher에서 방출되는 값의 갯수를 반환할때 사용합니다.
+let publisher = ["A", "B", "C", "D", "E"].publisher
+let publisher2 = PassthroughSubject<Int, Never>()
+
+publisher.count().sink {
+  print($0) // publisher value 갯수(5)를 반환합니다.
+}
+
+publisher2.count()
+  .sink {
+    print($0)
+  }
+
+publisher2.send(10)
+publisher2.send(5)
+// subject의 경우, completed 이벤트가 발생하기 전까지 count 결과를 알 수 없습니다.
+// subject의 경우, completed 이벤트 발생 후, 지금까지 방출한 값의 갯수가 내려온다.
+publisher2.send(completion: .finished)
+
 // MARK: 45. output operator
 // output operator 는 Sequence publisher의 특정 인덱스 혹은 범위의 이벤트를 방출받을때 사용합니다.
+/*
 let publisher = ["A", "B", "C", "D"].publisher
 print("Output(:at)")
 publisher.output(at: 2).sink {
@@ -13,6 +35,7 @@ print("Output(:in)")
 
 publisher.output(in: 0...2).sink { print($0) } // A, B, C
 publisher.output(in: 1...).sink { print($0) } // B, C, D
+ */
 
 // MARK: 44. first and last operator
 // first, last operator는 Sequence publisher의 처음, 마지막 이벤트 혹은 특정 조건을 충족하는 처음, 마지막 이벤트를 방출할 대 사용한다.
