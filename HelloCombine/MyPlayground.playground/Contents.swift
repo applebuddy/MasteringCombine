@@ -1,8 +1,22 @@
 import UIKit
 import Combine
 
-// MARK: 44. first and last
+// MARK: 45. output operator
+// output operator 는 Sequence publisher의 특정 인덱스 혹은 범위의 이벤트를 방출받을때 사용합니다.
+let publisher = ["A", "B", "C", "D"].publisher
+print("Output(:at)")
+publisher.output(at: 2).sink {
+  print($0) // C
+}
+
+print("Output(:in)")
+
+publisher.output(in: 0...2).sink { print($0) } // A, B, C
+publisher.output(in: 1...).sink { print($0) } // B, C, D
+
+// MARK: 44. first and last operator
 // first, last operator는 Sequence publisher의 처음, 마지막 이벤트 혹은 특정 조건을 충족하는 처음, 마지막 이벤트를 방출할 대 사용한다.
+/*
 let publisher = ["A", "B", "C", "D", "Boy", "Bo"].publisher
 
 publisher.first().sink { // Sequence publisher의 첫번째 이벤트를 방출
@@ -20,6 +34,7 @@ publisher.last().sink { // Sequence publisher의 마지막 이벤트를 방출
 publisher.last(where: { "Boy".contains($0) }).sink { // 특정 조건을 충족하는 마지막 이벤트를 방출할 수도 있다.
   print($0)
 }
+ */
 
 // MARK: - Section 6. Sequence Operators
 // MARK: 43. min and max operator
