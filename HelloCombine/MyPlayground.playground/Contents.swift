@@ -1,9 +1,45 @@
 import UIKit
 import Combine
 
+// MARK: 44. first and last
+// first, last operator는 Sequence publisher의 처음, 마지막 이벤트 혹은 특정 조건을 충족하는 처음, 마지막 이벤트를 방출할 대 사용한다.
+let publisher = ["A", "B", "C", "D", "Boy", "Bo"].publisher
+
+publisher.first().sink { // Sequence publisher의 첫번째 이벤트를 방출
+  print($0)
+}
+
+publisher.first(where: { "Cat".contains($0) }).sink { // 특정 조건을 충족하는 첫번째 이벤트를 방출할 수도 있다.
+  print($0)
+}
+
+publisher.last().sink { // Sequence publisher의 마지막 이벤트를 방출
+  print($0)
+}
+
+publisher.last(where: { "Boy".contains($0) }).sink { // 특정 조건을 충족하는 마지막 이벤트를 방출할 수도 있다.
+  print($0)
+}
+
+// MARK: - Section 6. Sequence Operators
+// MARK: 43. min and max operator
+// Sequence operators는 쉬운편에 속합니다. publisher 자기 자신의 값에 대한 연산 위주이기 때문입니다.
+// min, max : Sequence publisher의 최숏값, 최댓값을 방출한다.
+/*
+let publisher = [1, -45, 3, 35, 30, 100].publisher
+publisher.min().sink {
+  print($0)
+}
+
+publisher.max().sink {
+  print($0)
+}
+*/
+ 
 // MARK: 42. zip operator
 // 1) zip operator는 각각의 publisher에 대한 동일한 순서의 이벤트를 튜플로 묶어서 방출합니다.
 // 2) 만약 동일한 순서의 이벤트가 두 publisher에 없다면 방출되지 않습니다.
+/*
 let publisher1 = PassthroughSubject<Int, Never>()
 let publisher2 = PassthroughSubject<String, Never>()
 publisher1.zip(publisher2)
@@ -17,6 +53,7 @@ publisher2.send("A") // publisher1 : 1, publisher2 : "A"
 publisher1.send(3)
 publisher2.send("B") // publisher1 : 2, publisher2 : "B"
 publisher2.send("C") // publisher1 : 3, publisher2 : "C"
+ */
 
 // MARK: 41. combineLatest operator
 // combineLatest는 RxSwift와 이름 동작이 모두 유사합니다.
