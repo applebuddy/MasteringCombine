@@ -1,9 +1,31 @@
 import UIKit
 import Combine
 
+// MARK: 40. merge operator
+/*
+// merge operator는 두개의 publisher를 합쳐서 사용할 수 있고, 각각의 publisher의 이벤트를 합쳐서 시간순으로 받을 수 있다.
+let publisher1 = PassthroughSubject<Int, Never>()
+let publisher2 = PassthroughSubject<Int, Never>()
+publisher1.merge(with: publisher2).sink {
+  print($0)
+}
+
+// merge 한 두개의 subject publisher에 대한 이벤트를 시간순으로 수신할 수 있다.
+publisher1.send(1)
+publisher1.send(2)
+
+publisher2.send(4)
+publisher2.send(5)
+publisher2.send(6)
+
+publisher1.send(7)
+publisher1.send(8)
+*/
+ 
 // MARK: 39. switchToLatest continued
 // switchToLatest operator에 대한 실 사용 예시를 알아보자.
 // switchToLatest operator를 활용하면 버튼을 탭하고, 탭 이벤트 이후 이미지를 요청해서 받아올때, 가장 최근에 선택한 index(상태)에 대한 이미지를 불러올 수 있다.
+/*
 let images = ["Houston", "Denver", "Seattle"]
 var index = 0
 
@@ -25,7 +47,8 @@ let taps = PassthroughSubject<Void, Never>() // 버튼 탭 예시로 사용되�
 let subscription = taps.map { _ in getImage() }
   .print()
   .switchToLatest().sink {
-    print($0)
+    guard let image = $0 else { return }
+    print(image)
   }
 
 // getImage 메서드는 3초뒤 이미지를 전달한다.
@@ -53,6 +76,7 @@ DispatchQueue.main.asyncAfter(deadline: .now() + 6.5, execute: {
 
 // Denver에 대한 이미지 요청은 6초 이후 전달되었지만, 추가로 3초 후 이미지가 전달 되기 전에 index가 다시 증가하여 Seattle에 대한 index가 되었으므로
 // Denver가 아닌 최근 index에 대한 이미지인 Seattle 이미지를 받게 된다. 이처럼 switchToLatest operator는 가장 최근 상태에 대한 이벤트를 받고 싶을때 사용할 수 있다.
+ */
 
 // MARK: 38. switchToLatest operator
 // switchToLatest operator는 가장 최근 방출한 publisher에 대한 이벤트를 받고자할때 사용합니다.
