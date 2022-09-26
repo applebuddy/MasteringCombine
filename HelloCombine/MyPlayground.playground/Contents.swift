@@ -1,10 +1,33 @@
 import UIKit
 import Combine
 
+// MARK: - 50. URLSession extensions
+// Combine framework를 활용하여 get api request, response 네트워킹에 사용할 URLSession extension을 구성해봅니다.
+
+func getPosts() -> AnyPublisher<Data, URLError> {
+  // https://jsonplaceholder.typicode.com/posts
+  // https://api.publicapis.org/entries
+  guard let url = URL(string: "https://jsonplaceholder.typicode.com/posts") else {
+    fatalError("Invalid URL Error !!")
+  }
+
+  return URLSession.shared.dataTaskPublisher(for: url) // -> DataTaskPublisher
+    .map { $0.data } // -> DataTaskPublisher의 Output 중 data로 맵핑
+    .eraseToAnyPublisher() // 구독이 가능한 AnyPublisher 타입으로 반환된다.
+}
+
+// getPosts 결과를 정상적으로 출력하기 위해서는 cancellable 선언이 필요하다.
+let cancellable = getPosts().sink(receiveCompletion: { _ in
+  print("completion called")
+}, receiveValue: {
+  print("receiveValue closure called")
+  print($0)
+})
+
 // MARK: 49. reduce operator
 // reduce operator는 초깃값을 지정 후 Sequence publisher의 값들에 대한 연산을 누적시킨 결과 값을 반환할 때 사용합니다.
 // * 일반적으로 사용하는 reduce 고차함수 연산과 동일하게 사용 가능
-
+/*
 let publisher = [1, 2, 3, 4, 5, 6].publisher
 // reduce use case 1)
 publisher.reduce(0) { accumulator, value in
@@ -27,6 +50,7 @@ publisher.reduce(1) {
 }.sink {
   print($0)
 }
+ */
 
 // MARK: 48. allSatisfy operator
 // 1) allSatisfy operator는 특정 조건을 Sequence의 모든 값이 충족하고 있는지를 봅니다.
