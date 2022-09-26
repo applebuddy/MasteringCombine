@@ -1,9 +1,37 @@
 import UIKit
 import Combine
 
+// MARK: 49. reduce operator
+// reduce operator는 초깃값을 지정 후 Sequence publisher의 값들에 대한 연산을 누적시킨 결과 값을 반환할 때 사용합니다.
+// * 일반적으로 사용하는 reduce 고차함수 연산과 동일하게 사용 가능
+
+let publisher = [1, 2, 3, 4, 5, 6].publisher
+// reduce use case 1)
+publisher.reduce(0) { accumulator, value in
+  print("accumulator : \(accumulator) and the  value is \(value)")
+  return accumulator + value
+}.sink {
+  print($0)
+}
+
+// reduce use case 2)
+// case1과 동일하 연산 결과를 받을 수 있습니다.
+publisher.reduce(0, +).sink {
+  print($0)
+}
+
+// reduce use case 3)
+// publisher sequence 의 곱 누적
+publisher.reduce(1) {
+  return $0 * $1
+}.sink {
+  print($0)
+}
+
 // MARK: 48. allSatisfy operator
 // 1) allSatisfy operator는 특정 조건을 Sequence의 모든 값이 충족하고 있는지를 봅니다.
 // 2) allSatisfy 사용 시 모든 값이 조건을 충족하면 true, 아니면 false를 반환합니다.
+/*
 let publisher = [1, 2, 3, 4, 5, 6, 7].publisher
 let publisher2 = [1, 3, 5, 7, 9].publisher
 publisher.allSatisfy { $0 % 2 == 0 }.sink { // publisher의 Sequence 모든 값이 짝수인가?
@@ -13,6 +41,7 @@ publisher.allSatisfy { $0 % 2 == 0 }.sink { // publisher의 Sequence 모든 값�
 publisher2.allSatisfy { $0 & 1 == 1 }.sink { // publisher2 Sequence의 모든 값이 홀수인가?
   print($0) // publisher2 Sequence valus 가 odd number 이므로 true입니다.
 }
+ */
 
 // MARK: 47. contains operator
 // contains operator는 특정 값이 포함되었는지를 확인할때 사용하며, 포함여부를 Boolean으로 반환합니다.
