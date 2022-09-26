@@ -3,16 +3,24 @@ import Combine
 
 // MARK: - 50. URLSession extensions
 // Combine framework를 활용하여 get api request, response 네트워킹에 사용할 URLSession extension을 구성해봅니다.
+// MARK: - 51. Codable support
 
-func getPosts() -> AnyPublisher<Data, URLError> {
-  // https://jsonplaceholder.typicode.com/posts
-  // https://api.publicapis.org/entries
+struct Post: Codable {
+  // * 만약 실제 json 필드명과 변수명이 다르면 CodongKey을 사용해서 실제 필드명을 매핑해주어야 합니다.
+  let title: String
+  let body: String
+}
+
+func getPosts() -> AnyPublisher<[Post], Error> {
+  // ex 1) https://jsonplaceholder.typicode.com/posts
+  // ex 2) https://api.publicapis.org/entries
   guard let url = URL(string: "https://jsonplaceholder.typicode.com/posts") else {
     fatalError("Invalid URL Error !!")
   }
 
   return URLSession.shared.dataTaskPublisher(for: url) // -> DataTaskPublisher
     .map { $0.data } // -> DataTaskPublisher의 Output 중 data로 맵핑
+    .decode(type: [Post].self, decoder: JSONDecoder())
     .eraseToAnyPublisher() // 구독이 가능한 AnyPublisher 타입으로 반환된다.
 }
 
