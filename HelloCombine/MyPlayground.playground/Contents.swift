@@ -1,11 +1,29 @@
 import UIKit
 import Combine
 
+// MARK: 42. zip operator
+// 1) zip operator는 각각의 publisher에 대한 동일한 순서의 이벤트를 튜플로 묶어서 방출합니다.
+// 2) 만약 동일한 순서의 이벤트가 두 publisher에 없다면 방출되지 않습니다.
+let publisher1 = PassthroughSubject<Int, Never>()
+let publisher2 = PassthroughSubject<String, Never>()
+publisher1.zip(publisher2)
+  .sink {
+    print("publisher1 : \($0), publisher2 : \($1)")
+  }
+
+publisher1.send(1)
+publisher1.send(2)
+publisher2.send("A") // publisher1 : 1, publisher2 : "A"
+publisher1.send(3)
+publisher2.send("B") // publisher1 : 2, publisher2 : "B"
+publisher2.send("C") // publisher1 : 3, publisher2 : "C"
+
 // MARK: 41. combineLatest operator
 // combineLatest는 RxSwift와 이름 동작이 모두 유사합니다.
 // 1) 두개의 publisher 최신 값을 이벤트로 방출합니다.
 // 2) 둘 중 어느 하나의 이벤트가 방출될때마다 각 publisher의 최신값을 방출합니다.
 // 3) 서로 다른 값 타입의 publisher들에 대해서도 combineLatest operator를 사용하여 최신 이벤트를 전달받을 수 있습니다.
+/*
 let publisher1 = PassthroughSubject<Int, Never>()
 let publisher2 = PassthroughSubject<String, Never>()
 publisher1.combineLatest(publisher2)
@@ -19,6 +37,7 @@ publisher2.send("A") // 2, "A"
 publisher2.send("B") // 2, "B"
 
 publisher1.send(3) // 3, "B"
+ */
 
 
 // MARK: 40. merge operator
