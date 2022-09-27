@@ -13,6 +13,8 @@ class MyViewController : UIViewController {
   private let queue = DispatchQueue.main
   private let source = PassthroughSubject<Int, Never>()
   private var counter = 0
+  private var subscription1: AnyCancellable?
+  private var subscription2: AnyCancellable?
   
   override func loadView() {
     let view = UIView()
@@ -29,7 +31,28 @@ class MyViewController : UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.usingDispatchQueue_58()
+    self.understandingTheProblem_59()
+  }
+  
+  // MARK: - Section 10. Resources in Combine
+  // MARK: 59. Understanding the problem
+  private func understandingTheProblem_59() {
+    guard let url = URL(string: "https://jsonplaceholder.typicode.com/posts") else {
+      fatalError("Invalid URL")
+    }
+    
+    let request = URLSession.shared.dataTaskPublisher(for: url)
+      .map(\.data) // KeyPath를 통해 response빼고 data만 down stream에 넘길 수 있다.
+      .print() // print operator로 stream 동작상태를 확인할 수 있습니다.
+    
+    // subscription1, 2가 동일한 데이터를 받아온다. 이는 중복 작업으로 비효율적이다. 이러한 문제를 해결할 방법이 무엇이 있을까? share operator로 해결할 수 있다.
+    subscription1 = request.sink(receiveCompletion: { _ in }, receiveValue: {
+      print($0)
+    })
+    
+    subscription2 = request.sink(receiveCompletion: { _ in }, receiveValue: {
+      print($0)
+    })
   }
   
   // MARK: 58. Using DispatchQueue
@@ -37,6 +60,7 @@ class MyViewController : UIViewController {
   // DispatchQueue 를 통해 타이머 기능을 구현할 수 있습니다.
   private func usingDispatchQueue_58() {
     // RunLoop에서 처럼, 메모리에서 holding 할 수 있도록 timer실행 코드에 대한 할당을 해야 정상 동작이 됩니다.
+    /*
     timerSubscription = queue.schedule(
       after: queue.now,
       interval: .seconds(1)
@@ -55,6 +79,7 @@ class MyViewController : UIViewController {
       }
       print($0)
     }
+     */
   }
   
   // MARK: 57. Timer class
