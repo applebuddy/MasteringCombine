@@ -15,6 +15,9 @@ class MyViewController : UIViewController {
   private var counter = 0
   private var subscription1: AnyCancellable?
   private var subscription2: AnyCancellable?
+  private var subscription3: AnyCancellable?
+  /// multicast operator의 인자로 사용 될 subject
+  private let subjectToMulticast = PassthroughSubject<Data, URLError>()
   
   override func loadView() {
     let view = UIView()
@@ -36,6 +39,10 @@ class MyViewController : UIViewController {
   
   // MARK: - Section 10. Resources in Combine
   // MARK: 59. Understanding the problem
+  // MARK: 60. share operator
+  // MARK: 61. multicast operator
+  // 'How can we share the results of a publisher?'
+  // -> share operator를 사용하면 동일 publisher에 대한 구독 이벤트를 다수의 구독자가 공유하여 불필요한 중복 작업을 방지할 수 있다.
   private func understandingTheProblem_59() {
     guard let url = URL(string: "https://jsonplaceholder.typicode.com/posts") else {
       fatalError("Invalid URL")
@@ -44,15 +51,28 @@ class MyViewController : UIViewController {
     let request = URLSession.shared.dataTaskPublisher(for: url)
       .map(\.data) // KeyPath를 통해 response빼고 data만 down stream에 넘길 수 있다.
       .print() // print operator로 stream 동작상태를 확인할 수 있습니다.
+      .multicast(subject: self.subjectToMulticast) // multicast operator를 사용하면 해당 publisher를 구독하는 구독자들이 동일한 subject값을 전달받을 수 있게 된다.
+//      .share() // * share operator를 사용하면 해당 publisher에 대한 이벤트를 다수의 구독자가 공유하여 중복 작업 문제를 해결할 수 있다.
     
     // subscription1, 2가 동일한 데이터를 받아온다. 이는 중복 작업으로 비효율적이다. 이러한 문제를 해결할 방법이 무엇이 있을까? share operator로 해결할 수 있다.
     subscription1 = request.sink(receiveCompletion: { _ in }, receiveValue: {
+      print("Subscription 1")
       print($0)
     })
     
     subscription2 = request.sink(receiveCompletion: { _ in }, receiveValue: {
+      print("Subscription 2")
+      print($0) // 두번째 구독자는 이미 앞서 처리된 데이터를 공유하여 중복 작업을 하지 않게 됩니다.
+    })
+
+    self.subscription3 = request.sink(receiveCompletion: { _ in }, receiveValue: {
+      print("Subscription 3")
       print($0)
     })
+    
+    let cancellable = request.connect()
+    // multicast operator로 지정한 subject를 통해 request 구독자들에게 동일한 데이터를 전달할 수 있다.
+    self.subjectToMulticast.send(Data())
   }
   
   // MARK: 58. Using DispatchQueue
