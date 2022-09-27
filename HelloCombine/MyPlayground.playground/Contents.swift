@@ -1,6 +1,22 @@
 import UIKit
 import Combine
 
+// MARK: Section 12. Understanding MVVM Design Pattern
+
+// MARK: - Section 12. Understanding MVVM Design Pattern
+// MARK: 68. What is MVC design pattern
+// MVC : Model View ViewController로 구성되는 디자인패턴,
+// 1) Model과 View를 ViewController가 중계해주는 방식으로 동작한다. ViewController의 역할이 큰 편으로 Controller에 많은 코드가 들어간다.
+
+// MARK: 69. What is wrong with MVC?
+// 2) 진입장벽이 낮지만, Massive ViewController의 가능성이 커서 Testability가 좋지 않다는 단점이 있다.
+
+// MARK: 70. What is MVVM design pattern
+// MVVM : Model View ViewModel로 구성되는 디자인패턴으로 ViewController의 역할을 줄이고, 보다 Testabiliity를 향상시킬 수 있어 Unit Test에 용이하다.
+// - View : 말 그대로 앱에 display 되는 화면이다. ViewModel과 talk 한다.
+// - ViewModel : View와 바인딩되는 데이터이며, 비즈니스 로직도 포함된다. View, Model와 talk 한다.
+// - Model : 말 그대로 Model이며, ViewModel에서 사용된다. 필요에 따라 Model을 ViewModel로 변환하기도 한다.
+
 // MARK: 54. Acting on events - performing side effects
 /*
 guard let url = URL(string: "https://jsonplaceholder.typicode.com/posts") else {
