@@ -10,6 +10,9 @@ class MyViewController : UIViewController {
   private var timerSubscription: Cancellable?
   private var cancellable: AnyCancellable?
   private let runLoop = RunLoop.main
+  private let queue = DispatchQueue.main
+  private let source = PassthroughSubject<Int, Never>()
+  private var counter = 0
   
   override func loadView() {
     let view = UIView()
@@ -26,7 +29,32 @@ class MyViewController : UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.usingTimerClass_57()
+    self.usingDispatchQueue_58()
+  }
+  
+  // MARK: 58. Using DispatchQueue
+  // RunLoop class, Timer class 에 이어 타이머를 사용하는 세번째 방법은 DispatchQueue입니다.
+  // DispatchQueue 를 통해 타이머 기능을 구현할 수 있습니다.
+  private func usingDispatchQueue_58() {
+    // RunLoop에서 처럼, 메모리에서 holding 할 수 있도록 timer실행 코드에 대한 할당을 해야 정상 동작이 됩니다.
+    timerSubscription = queue.schedule(
+      after: queue.now,
+      interval: .seconds(1)
+    ) { [weak self] in
+      guard let self = self else { return }
+      // timer 호출마다 source subject에서 counter값 이벤트를 방출합니다.
+      self.source.send(self.counter)
+      self.counter += 1
+    }
+    
+    cancellable = source.sink {
+      if $0 == 5 {
+        // timer가 5번째 호출될때 구독을 취소하여 타이머 이벤트를 종료합니다.
+        self.cancellable?.cancel()
+        return
+      }
+      print($0)
+    }
   }
   
   // MARK: 57. Timer class
@@ -34,6 +62,7 @@ class MyViewController : UIViewController {
   // * autoconnect() : upstream connectable publisher에 자동적으로 연결을 시켜주는 메서드이다.
   private func usingTimerClass_57() {
     // 1초마다 메인스레드에서 타이머를 동작 시킨다.
+    /*
     cancellable = Timer.publish(every: 1.0, on: .main, in: .common)
       .autoconnect()
       .scan(0) { counter, _ in
@@ -42,6 +71,7 @@ class MyViewController : UIViewController {
       .sink { value in
         print("Timer Fired! \(value)")
       }
+     */
   }
   
   // MARK: - Section 9. Combine Timers
