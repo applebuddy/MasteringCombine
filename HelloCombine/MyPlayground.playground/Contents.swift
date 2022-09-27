@@ -1,7 +1,12 @@
 import UIKit
 import Combine
 
-// MARK: Section 12. Understanding MVVM Design Pattern
+// MARK: - Section 13. SwiftUI Basics
+// MARK: 71. What is SwiftUI
+// 1) SwiftUI : Storyboard, xib, autolayout 등의 이전 방식과 다른 선언형 방식으로 UI를 구성할 수 있는 프레임워크이다.
+// 2) maxOS, iOS, watchOS 등에서 모두 사용이 가능하다.
+// 3) 보다 선언적이고, 간결하게 코드를 구성할 수 있는 장점이 있다.
+// 4) live view 등의 기능으로 디버깅 없이 실시간으로 preView를 보며 개발할 수 있는 기능이 있다.
 
 // MARK: - Section 12. Understanding MVVM Design Pattern
 // MARK: 68. What is MVC design pattern
