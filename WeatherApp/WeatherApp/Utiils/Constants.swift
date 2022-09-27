@@ -8,7 +8,7 @@
 import Foundation
 
 struct Constants {
-  struct URLs {
-    static let weather = "http://api.openweathermap.org/data/2.5/weather?q=Boston&appid=83ac5aa4b3c35a75018e9ffe83d7060d&units=imperial"
+  static func weather(city: String) -> String {
+    return "http://api.openweathermap.org/data/2.5/weather?q=\(city)&appid=83ac5aa4b3c35a75018e9ffe83d7060d&units=imperial"
   }
 }

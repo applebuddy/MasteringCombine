@@ -25,15 +25,27 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="g83-iW-LO6">
+                                <rect key="frame" x="30" y="384" width="354" height="34"/>
+                                <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" red="0.92560279190000005" green="0.92560279190000005" blue="0.92560279190000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="cGC-jz-iMA" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="5ta-2t-f6j"/>
+                            <constraint firstItem="g83-iW-LO6" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="bpt-ui-tWH"/>
+                            <constraint firstItem="g83-iW-LO6" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="cII-kt-4Fy"/>
                             <constraint firstItem="cGC-jz-iMA" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="dGR-Es-eaK"/>
+                            <constraint firstItem="cGC-jz-iMA" firstAttribute="top" secondItem="g83-iW-LO6" secondAttribute="bottom" constant="10" id="jYW-1C-4XU"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="g83-iW-LO6" secondAttribute="trailing" constant="30" id="stc-gl-VkX"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="cityTextField" destination="g83-iW-LO6" id="aGG-gk-UQ0"/>
                         <outlet property="temperatureLabel" destination="cGC-jz-iMA" id="qei-bS-a7a"/>
                     </connections>
                 </viewController>

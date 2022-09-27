@@ -14,8 +14,4 @@ struct WeatherResponse: Decodable {
 struct Weather: Decodable {
   let temp: Double?
   let humidity: Double?
-  
-  static var placeholder: Weather {
-    Weather(temp: nil, humidity: nil)
-  }
 }
