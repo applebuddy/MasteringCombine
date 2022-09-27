@@ -2,6 +2,7 @@ import UIKit
 import Combine
 
 // MARK: 54. Acting on events - performing side effects
+/*
 guard let url = URL(string: "https://jsonplaceholder.typicode.com/posts") else {
   fatalError("Invalid URL")
 }
@@ -36,6 +37,7 @@ let cancellable = request
 }, receiveValue: { value in
   print(value.data)
 })
+ */
 
 // MARK: Section 8. Debugging Combine
 // MARK: 53. Printing events

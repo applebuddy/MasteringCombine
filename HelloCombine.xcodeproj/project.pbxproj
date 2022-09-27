@@ -18,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0776E39F28E323690018A377 /* SingleViewPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = SingleViewPlayground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		0793C1B628DF47B900DA7626 /* HelloCombine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloCombine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0793C1B928DF47B900DA7626 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0793C1BB28DF47B900DA7626 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -64,6 +65,7 @@
 				0793C1B928DF47B900DA7626 /* AppDelegate.swift */,
 				0793C1BB28DF47B900DA7626 /* SceneDelegate.swift */,
 				0793C1BD28DF47B900DA7626 /* ViewController.swift */,
+				0776E39F28E323690018A377 /* SingleViewPlayground.playground */,
 				0793C1CD28DF47CF00DA7626 /* MyPlayground.playground */,
 				0793C1BF28DF47B900DA7626 /* Main.storyboard */,
 				0793C1C228DF47BB00DA7626 /* Assets.xcassets */,
