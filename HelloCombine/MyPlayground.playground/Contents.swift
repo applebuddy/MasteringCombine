@@ -1,6 +1,42 @@
 import UIKit
 import Combine
 
+// MARK: 54. Acting on events - performing side effects
+guard let url = URL(string: "https://jsonplaceholder.typicode.com/posts") else {
+  fatalError("Invalid URL")
+}
+
+let request = URLSession.shared.dataTaskPublisher(for: url) // -> URLSession.DataTaskPublisher, (data, response) 튜플 데이터를 방출한다.
+// subscription을 받고, -> cancel을 받으며 정상 동작하지 않는다...
+// => subscription을 잡고(hold)있지 않기 때문이다. cancellable 상수를 선언해보자
+// => "Received Cancel"이 아닌 "Received Request"가 호출되고 이후 동작을 처리할 수 있다.
+// 정상적으로 동작할 경우 동작 순서
+// 1) Received Request
+// 2) Subscription Received
+// 3) Received Output
+// 4) ~~~~ bytes (Decoding 되지 않은 json Data 수신)
+// 5) Received Completion
+// 6) finished
+
+let cancellable = request
+  .handleEvents(receiveSubscription: { _ in
+    print("Subscription Received")
+  }, receiveOutput: { _ in
+    print("Received Output")
+  }, receiveCompletion: { _ in
+    print("Received Completion")
+  }, receiveCancel: {
+    print("Received Cancel")
+  }, receiveRequest: { _ in
+    print("Received Request")
+  })
+  .print()
+  .sink(receiveCompletion: {
+  print($0)
+}, receiveValue: { value in
+  print(value.data)
+})
+
 // MARK: Section 8. Debugging Combine
 // MARK: 53. Printing events
 // print operator는 디버깅에 사용하는 operator로 인자로 디버깅 레이블을 넣어서 출력할 수도 있다.
