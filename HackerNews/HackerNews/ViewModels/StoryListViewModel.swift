@@ -17,8 +17,9 @@ class StoryListViewModel: ObservableObject {
   }
   
   private func fetchTopStories() {
-    self.cancellable = Webservice().getAllTopStories().map { storyIds in
-      storyIds.map { StoryViewModel(id: $0) }
+    // getAllTopStories() 반환타입 변경으로 storyIds 대신 story를 처리하는 것으로 변경
+    self.cancellable = Webservice().getAllTopStories().map { stories in
+      stories.map { StoryViewModel(story: $0) }
     }.sink(receiveCompletion: { _ in }) { storyViewModels in
       self.stories = storyViewModels
     }
@@ -26,5 +27,18 @@ class StoryListViewModel: ObservableObject {
 }
 
 struct StoryViewModel {
-  let id: Int
+
+  let story: Story
+
+  var id: Int {
+    return story.id
+  }
+  
+  var title: String {
+    return story.title
+  }
+  
+  var url: String {
+    return self.story.url
+  }
 }
