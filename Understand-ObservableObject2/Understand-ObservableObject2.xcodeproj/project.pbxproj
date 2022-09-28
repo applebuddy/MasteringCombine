@@ -15,6 +15,7 @@
 		0721DDED28E487FF0088C8E5 /* Understand_ObservableObject2UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0721DDEC28E487FF0088C8E5 /* Understand_ObservableObject2UITests.swift */; };
 		0721DDEF28E487FF0088C8E5 /* Understand_ObservableObject2UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0721DDEE28E487FF0088C8E5 /* Understand_ObservableObject2UITestsLaunchTests.swift */; };
 		0721DDFC28E488910088C8E5 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0721DDFB28E488910088C8E5 /* UserSettings.swift */; };
+		0721DDFE28E48AF80088C8E5 /* FancyScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0721DDFD28E48AF80088C8E5 /* FancyScoreView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		0721DDEC28E487FF0088C8E5 /* Understand_ObservableObject2UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Understand_ObservableObject2UITests.swift; sourceTree = "<group>"; };
 		0721DDEE28E487FF0088C8E5 /* Understand_ObservableObject2UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Understand_ObservableObject2UITestsLaunchTests.swift; sourceTree = "<group>"; };
 		0721DDFB28E488910088C8E5 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		0721DDFD28E48AF80088C8E5 /* FancyScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FancyScoreView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				0721DDD128E487FD0088C8E5 /* Understand_ObservableObject2App.swift */,
+				0721DDFD28E48AF80088C8E5 /* FancyScoreView.swift */,
 				0721DDD328E487FD0088C8E5 /* ContentView.swift */,
 				0721DDD528E487FF0088C8E5 /* Assets.xcassets */,
 				0721DDD728E487FF0088C8E5 /* Preview Content */,
@@ -263,6 +266,7 @@
 				0721DDD428E487FD0088C8E5 /* ContentView.swift in Sources */,
 				0721DDFC28E488910088C8E5 /* UserSettings.swift in Sources */,
 				0721DDD228E487FD0088C8E5 /* Understand_ObservableObject2App.swift in Sources */,
+				0721DDFE28E48AF80088C8E5 /* FancyScoreView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
