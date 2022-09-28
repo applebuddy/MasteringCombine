@@ -34,7 +34,23 @@ class MyViewController : UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.understandingTheProblem_59()
+    self.retrievingTopStoryIDs_87()
+  }
+  
+  // MARK: - Section 15. Hacker News - SwiftUI, Combine and Web API
+  // MARK: 87. Retrieving Top Story IDs
+  private func retrievingTopStoryIDs_87() {
+    guard let url = URL(string: "https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty") else {
+      fatalError("Invalid URL")
+    }
+
+    self.cancellable = URLSession.shared.dataTaskPublisher(for: url)
+      .map(\.data)
+      .decode(type: [Int].self, decoder: JSONDecoder())
+      .print()
+      .sink(receiveCompletion: { _ in }, receiveValue: {
+        print($0)
+      })
   }
   
   // MARK: - Section 10. Resources in Combine
