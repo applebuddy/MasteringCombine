@@ -17,6 +17,7 @@
 		073D3BAD28E4B51D00B07D09 /* Webservice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073D3BAC28E4B51D00B07D09 /* Webservice.swift */; };
 		073D3BB028E4B94900B07D09 /* StoryListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073D3BAF28E4B94900B07D09 /* StoryListViewModel.swift */; };
 		073D3BB328E4BADA00B07D09 /* StoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073D3BB228E4BADA00B07D09 /* StoryListView.swift */; };
+		073D3BB628E4BD7A00B07D09 /* Story.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073D3BB528E4BD7A00B07D09 /* Story.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		073D3BAC28E4B51D00B07D09 /* Webservice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Webservice.swift; sourceTree = "<group>"; };
 		073D3BAF28E4B94900B07D09 /* StoryListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryListViewModel.swift; sourceTree = "<group>"; };
 		073D3BB228E4BADA00B07D09 /* StoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryListView.swift; sourceTree = "<group>"; };
+		073D3BB528E4BD7A00B07D09 /* Story.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Story.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 		073D3B8028E4B4EF00B07D09 /* HackerNews */ = {
 			isa = PBXGroup;
 			children = (
+				073D3BB428E4BD6D00B07D09 /* Models */,
 				073D3BB128E4BAC800B07D09 /* Views */,
 				073D3BAE28E4B93C00B07D09 /* ViewModels */,
 				073D3BAB28E4B50C00B07D09 /* Services */,
@@ -158,6 +161,14 @@
 				073D3BB228E4BADA00B07D09 /* StoryListView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		073D3BB428E4BD6D00B07D09 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				073D3BB528E4BD7A00B07D09 /* Story.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -295,6 +306,7 @@
 				073D3BB328E4BADA00B07D09 /* StoryListView.swift in Sources */,
 				073D3B8228E4B4EF00B07D09 /* HackerNewsApp.swift in Sources */,
 				073D3BAD28E4B51D00B07D09 /* Webservice.swift in Sources */,
+				073D3BB628E4BD7A00B07D09 /* Story.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
