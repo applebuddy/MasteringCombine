@@ -18,6 +18,7 @@
 		073D3BB028E4B94900B07D09 /* StoryListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073D3BAF28E4B94900B07D09 /* StoryListViewModel.swift */; };
 		073D3BB328E4BADA00B07D09 /* StoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073D3BB228E4BADA00B07D09 /* StoryListView.swift */; };
 		073D3BB628E4BD7A00B07D09 /* Story.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073D3BB528E4BD7A00B07D09 /* Story.swift */; };
+		073D3BB828E4BEDB00B07D09 /* StoryDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073D3BB728E4BEDB00B07D09 /* StoryDetailViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		073D3BAF28E4B94900B07D09 /* StoryListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryListViewModel.swift; sourceTree = "<group>"; };
 		073D3BB228E4BADA00B07D09 /* StoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryListView.swift; sourceTree = "<group>"; };
 		073D3BB528E4BD7A00B07D09 /* Story.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Story.swift; sourceTree = "<group>"; };
+		073D3BB728E4BEDB00B07D09 /* StoryDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryDetailViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				073D3BAF28E4B94900B07D09 /* StoryListViewModel.swift */,
+				073D3BB728E4BEDB00B07D09 /* StoryDetailViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -304,6 +307,7 @@
 				073D3BB028E4B94900B07D09 /* StoryListViewModel.swift in Sources */,
 				073D3B8428E4B4EF00B07D09 /* ContentView.swift in Sources */,
 				073D3BB328E4BADA00B07D09 /* StoryListView.swift in Sources */,
+				073D3BB828E4BEDB00B07D09 /* StoryDetailViewModel.swift in Sources */,
 				073D3B8228E4B4EF00B07D09 /* HackerNewsApp.swift in Sources */,
 				073D3BAD28E4B51D00B07D09 /* Webservice.swift in Sources */,
 				073D3BB628E4BD7A00B07D09 /* Story.swift in Sources */,
