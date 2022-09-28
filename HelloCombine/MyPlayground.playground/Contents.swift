@@ -1,6 +1,14 @@
 import UIKit
 import Combine
 
+// MARK: 79. What is Binding?
+// View와 ViewModel을 묶는 것을 Binding이라고 한다. SwiftUI는 Binding을 제공한다.
+// 1) View to ViewModel Binding
+// ex) View 텍스트필드의 텍스트와 ViewModel의 name, age 같은 데이터가 바인딩 될 수 있다.
+// ex) name 텍스트 필드에 "John"을 적으면, ViewModel의 name은 "John" 값을 갖는다.
+// 2) ViewModel to View Binding
+// ex) ViewModel의 name 값이 "John"으로 변화하면, 이에 Binding 되어있는 View에도 "John"으로 바뀔 수 있다.
+
 // MARK: - Section 14. Understanding State and Binding
 // MARK: 75. Understanding State
 // 1) State는 SwiftUI에서 중요한 개념 중 하나이다.
