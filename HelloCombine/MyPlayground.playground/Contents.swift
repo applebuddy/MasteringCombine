@@ -1,6 +1,13 @@
 import UIKit
 import Combine
 
+// MARK: - Section 14. Understanding State and Binding
+// MARK: 75. Understanding State
+// 1) State는 SwiftUI에서 중요한 개념 중 하나이다.
+// 2) Action에 의해 State가 변화하면 자동적으로 User Interface를 업데이트 시켜준다.
+// 3) State 값이 변화하면, new View Rendering이 동작한다.
+// * User Interaction -> Action -> State Mutation -> View Update -> Rendering new View -> ..
+
 // MARK: - Section 13. SwiftUI Basics
 // MARK: 71. What is SwiftUI
 // 1) SwiftUI : Storyboard, xib, autolayout 등의 이전 방식과 다른 선언형 방식으로 UI를 구성할 수 있는 프레임워크이다.
