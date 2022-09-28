@@ -17,7 +17,7 @@ class Webservice {
     return URLSession.shared.dataTaskPublisher(for: url)
       .map(\.data)
       .decode(type: Story.self, decoder: JSONDecoder())
-      .catch { _ in Empty<Story, Error>() } // error 발생 시 Empty publisher를 반환
+//      .catch { _ in Empty<Story, Error>() } // error 발생 시 Empty publisher를 반환
       .receive(on: RunLoop.main)
       .eraseToAnyPublisher()
   }

@@ -14,7 +14,9 @@ struct StoryListView: View {
   var body: some View {
     NavigationView {
       List(self.storyListViewModel.stories, id: \.id) { storyViewModel in
-        Text("\(storyViewModel.id)")
+        NavigationLink(destination: StoryDetailView(storyId: storyViewModel.id)) {
+          Text("\(storyViewModel.id)")
+        }
       }
       .navigationTitle("Hacker News")
     }
