@@ -23,6 +23,7 @@ struct StoryDetailView: View {
   var body: some View {
     VStack {
       Text(self.storyDetailViewModel.title)
+      WebView(url: self.storyDetailViewModel.url)
     }
   }
 }
