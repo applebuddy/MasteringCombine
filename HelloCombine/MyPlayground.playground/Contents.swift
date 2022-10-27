@@ -716,8 +716,8 @@ anyCancellable.cancel()
 // MARK: - 13. Type Eraser
 // 사용한 Publisher의 타입을 가리고 싶을때가 있을 수 있다.
 // eraseToAnyPublisher를 사용하면 AnyPublisher로 타입이 바뀐다. (기존 publisher 타입을 래핑한다.)
-// 다양한 오퍼레이터를 거쳐가는 경우 타입이 매우 복잡해지고, 파이프라인이 모둔 외부에 노출되는 문제가 있다.
-// -> eraseToAnyPublisher를 사용하면 기존의 데이터 스트림과 상관엇이 최종적인 형태의 Publisher를 반환한다. 최종적으로 받게 되는 데이터를 전달하는 목적으로만 타입을 변환하여 사용할 수 있다.
+// 다양한 오퍼레이터를 거쳐가는 경우 타입이 매우 복잡해지고, 파이프라인이 모두 외부에 노출되는 문제가 있다.
+// -> eraseToAnyPublisher를 사용하면 기존의 데이터 스트림과 상관없이 최종적인 형태의 Publisher를 반환한다. 최종적으로 받게 되는 데이터를 전달하는 목적으로만 타입을 변환하여 사용할 수 있다.
 /*
 let publisher = PassthroughSubject<Int, Never>() // PassthroughSubject<Int, Never>
   .map { $0 } // Publisher.Map<PassthroughSubject<Int, Never>, Int>

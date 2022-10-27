@@ -121,7 +121,7 @@ class ViewController: UIViewController {
     // 구독 중의 이벤트는 받을 수 있다. 구독한 Observable, Publisher의 이벤트를 전달 받는다.
     NotificationCenter.default.post(name: notification, object: nil)
     
-    // News Paper를 예로 들어보자. 구독을 하다가, 취소를 해야 신물을 그만 볼 수 있다.
+    // News Paper를 예로 들어보자. 구독을 하다가, 취소를 해야 신문을 그만 볼 수 있다.
     // Tuesday -> Delivered
     // Wednesday -> Delivered
     // Thursday -> Delivered
@@ -129,7 +129,7 @@ class ViewController: UIViewController {
     disposable.dispose()
     subscription.cancel()
     
-    // 구독 취소 후의 Observable, Publiisher 이벤트는 받을 수 없다.
+    // 구독 취소 후의 Observable, Publisher 이벤트는 받을 수 없다.
     NotificationCenter.default.post(name: notification, object: nil)
     */
 
