@@ -261,3 +261,184 @@ publisher.send(Point(x: 10, y: 20))
   }
 ~~~
 
+
+
+## replaceEmpty operator
+
+~~~swift
+// MARK: 22. replaceEmpty operator
+// Empty<Int, Never> Publisher는 어떠한 값을 방출하지 않으며, 에러또한 방출하지 않습니다.
+let empty = Empty<Int, Never>()
+//let cancellable = [1, 2, 3, 4, 5].publisher.sink { print($0) }
+//cancellable.cancel()
+
+empty
+  .replaceEmpty(with: 1) // replaceEmpty operator를 통해 Empty Publisher의 값을 특정 값으로 바꾸어 구독자에게 전달 가능
+  .sink(receiveCompletion: {
+  print($0) // 1, finished
+}, receiveValue: {
+  print($0)
+})
+~~~
+
+
+
+## scan operator
+
+~~~swift
+// MARK: 23. scan operator
+// RxSwift의 scan와 이름이 동일하고 기능도 유사한 operator로 Sequence의 연산 결과를 모두 반환한다.
+let publisher = (1...10).publisher
+publisher.scan([]) { numbers, value -> [Int] in
+// numbers: [Int]에 연산이 누적된다., value: Int 는 publisher의 각각의 element
+  return numbers + [value] // publisher 값을 순차적으로 append 하고 있다.
+}.sink { scanValue in
+  print(scanValue) // scan operator의 appending 연산 과정이 모두 출력된다.
+}
+~~~
+
+
+
+## filter operator
+
+~~~swift
+// MARK: - Section 4. Filtering Operators
+// MARK: 24. filter operator
+// RxSwift의 filter와 동일하다. 기존 Sequence를 특정 조건을 충족하는 값만 있는 Sequence로 반환한다.
+let numbers = (1...20).publisher
+numbers.filter { $0 % 2 == 0 }.sink(receiveValue: {
+  print($0) // (1...20) 값들 중 짝수값만 출력된다.
+})
+~~~
+
+
+
+## removeDuplicates operator
+
+~~~swift
+// MARK: 25. removeDuplicates operator
+// removeDuplicates operator를 사용하면 Sequence의 중복값을 제거한 Sequence로 반환받을 수 있다.
+// removeDuplicates를 사용할때 모든 중복값이 제거되는 것은 아니다. Sequence에서 연속된 중복값만 한하여 무시하여 필터링한다.
+// 중복 문자열이 있는 배열에 대한 publisher를 선언한다.
+let words = "apple apple fruit apple mango watermelon apple".components(separatedBy: " ").publisher
+  .removeDuplicates()
+words.sink {
+  print($0)
+}
+~~~
+
+
+
+
+
+## 🐵 operator exercise
+
+~~~swift
+let publisher = [1, 1, 1, 2, 2, 2, 3, 3, 3, 1, 1]
+      .reduce(into: Set<Int>()) { result, value in // 중복 제거
+        result.insert(value)
+      }
+      .sorted() // 중복 제거 후 오름차순 정렬
+      .publisher // Publisher 변환 후 구독 진행
+      .sink { value in
+        print(value) // 1, 2, 3 수신
+      }
+~~~
+
+
+
+## compactMap operator
+
+- compactMap operator는 map과 유사한 동작을 하지만 연산 결과가 non-optional인 값만 모아서  Sequence로 변환하는 차이점이 있다. 즉, compactMap operator는  non-optional Sequence만 반환한다.
+
+~~~swift
+let strings = ["a", "1.24", "b", "3.45", "6.7"]
+  .publisher.compactMap { Float($0) }
+  .sink {
+    print($0)
+  }
+~~~
+
+
+
+## ignoreOutput operator
+
+- ignoreOutput operator는  completiion event만 받고 그 이외의 이벤트는 무시하고자 할 때 사용 가능합니다.
+
+~~~swift
+let numbers = (1...5000).publisher
+numbers
+  .ignoreOutput() // ignoreOutput operator를 사용하면 completion 이벤트만 받고 이외의 이벤트는 무시합니다.
+  .sink {
+  print($0) // finished Completion만 전달 받습니다.
+} receiveValue: {
+  print($0) // 1...5000의 값은 출력되지 않습니다.
+}
+~~~
+
+
+
+## first, last operator
+
+- first operator는 Sequence의 첫번째 혹은 특정 조건에 맞는 첫번째 값을 방출할때 사용할 수 있습니다.
+- last operator는 Sequence의 마지막 혹은 특정 조건에 맞는 마지막 값을 방출할때 사용할 수 있습니다.
+
+~~~swift
+// MARK: 28. first operator
+// first operator는 Sequence의 첫번째 혹은 특정 조건에 맞는 첫번째 값을 방출할때 사용할 수 있습니다.
+// MARK: 29. last operator
+// last operator는 Sequence의 마지막 혹은 특정 조건에 맞는 마지막 값을 방출할때 사용할 수 있습니다.
+let numbers = (1...9).publisher
+
+numbers.first(where: { $0 % 2 == 0 }) // 짝수인 첫번째 값을 방출
+  .sink {
+    print($0) // 2 (sequence publisher의 첫번째 홀수 값
+  }
+
+numbers.last(where: { $0 % 2 == 1 }) // 홀수인 마지막 값을 방출
+  .sink {
+    print($0) // 9 (sequence publisher의 마지막 홀수 값)
+  }
+~~~
+
+
+
+## dropFirst / dropWhile / dropUntilOutputFrom operator
+
+- dropFirst는 Sequence에서 최초 N개의 이벤트를 무시하고자 할때 사용할 수 있다.
+- dropWhile은 특정 조건을 충족하는 동안 이벤트를 무시하고자 할때 사용한다.
+- dropUntilOutputFrom은 trigger용 Subject로부터 이벤트를 받기 전까지 이벤트를 무시할 수 있다.
+
+~~~swift
+// MARK: 30. dropFirst operator
+// dropFirst는 Sequence에서 최초 N개의 이벤트를 무시하고자할때 사용가능하다.
+let numbers = (1...10).publisher
+numbers.dropFirst(5)
+	.sink {
+    print($0)
+  }
+
+// MARK: 31. dropWhile operator
+// dropWhile은 Sequence에서 특정 조건을 충족하는 동안은 이벤트를 무시하고 조건에 부합되지 않는 이벤트부터 이벤트를 방출한다.
+let numbers = (1...10).publisher
+numbers.drop(while: { $0 != 3 }) // 1, 2는 3이 아니므로 무시, 3부터 이벤트가 방출
+	.sink {
+    print($0)
+  }
+
+// MARK: 32. dropUntilOutputFrom operator
+// dropUntilOutputFrom operator는 특정 publisher(untilOutputFrom의 인자)로부터 이벤트를 받기 전까지 이벤트를 무시한다.
+let taps = PassthroughSubject<Int, Never>() // 이벤트 구독 감지할 taps subject
+let isReady = PassthroughSubject<Void, Never>() // trigger용 isReady subject
+taps.drop(untilOutputFrom: isReady)
+	.sink(receiveValue: {
+    print($0)
+  })
+// isReady publisher가 이벤트를 방출하기 전까지 taps subject의 이벤트는 무시됩니다.
+// isReady subject(publisher)가 이벤트를 방출한 이후부터 tap subject의 이벤트가 방출됩니다.
+(1...10).forEach { n in
+	if n == 6 { isReady.send(()) } // isReady subject에서 이벤트를 방출 하는 시점 부터 taps subject로부터 이벤트를 받음
+	taps.send(n) // isReady가 이벤트를 방출한 이후부터 tap subject(publisher)는 이벤트를 방출, 구독 값 수신이 가능
+}
+~~~
+
