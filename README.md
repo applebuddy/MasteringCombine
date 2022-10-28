@@ -187,7 +187,7 @@ let publisher = PassthroughSubject<Int, Never>() // PassthroughSubject<Int, Neve
 
 
 
-## 15. Collect operator
+### collect operator
 
 - collect operator는 방출할 모든 이벤트를 하나로 모아놓은 Array로 반환한다.
 - collect N : Int 인자를 넣으면 N개 단위로 나누어서 Array를 반환한다.
@@ -203,7 +203,7 @@ anyCancellable.cancel()
 
 
 
-## map operator
+### map operator
 
 ~~~swift
 // MARK: 16. map operator
@@ -222,7 +222,7 @@ formatter.numberStyle = .spellOut
 
 
 
-## map with keyPath
+### map with keyPath
 
 ~~~swift
 // MARK: 17. map KeyPath
@@ -244,7 +244,7 @@ publisher.send(Point(x: 10, y: 20))
 
 
 
-## replaceNil operator
+### replaceNil operator
 
 - publisher sequence에 nil이 있을 경우 nil을 특정 값으로 변환한 sequence를 반환합니다.
 
@@ -263,7 +263,7 @@ publisher.send(Point(x: 10, y: 20))
 
 
 
-## replaceEmpty operator
+### replaceEmpty operator
 
 ~~~swift
 // MARK: 22. replaceEmpty operator
@@ -283,7 +283,7 @@ empty
 
 
 
-## scan operator
+### scan operator
 
 ~~~swift
 // MARK: 23. scan operator
@@ -299,7 +299,7 @@ publisher.scan([]) { numbers, value -> [Int] in
 
 
 
-## filter operator
+### filter operator
 
 ~~~swift
 // MARK: - Section 4. Filtering Operators
@@ -313,7 +313,7 @@ numbers.filter { $0 % 2 == 0 }.sink(receiveValue: {
 
 
 
-## removeDuplicates operator
+### removeDuplicates operator
 
 ~~~swift
 // MARK: 25. removeDuplicates operator
@@ -331,7 +331,7 @@ words.sink {
 
 
 
-## 🐵 operator exercise
+### 🐵 operator exercise
 
 ~~~swift
 let publisher = [1, 1, 1, 2, 2, 2, 3, 3, 3, 1, 1]
@@ -347,7 +347,7 @@ let publisher = [1, 1, 1, 2, 2, 2, 3, 3, 3, 1, 1]
 
 
 
-## compactMap operator
+### compactMap operator
 
 - compactMap operator는 map과 유사한 동작을 하지만 연산 결과가 non-optional인 값만 모아서  Sequence로 변환하는 차이점이 있다. 즉, compactMap operator는  non-optional Sequence만 반환한다.
 
@@ -361,7 +361,7 @@ let strings = ["a", "1.24", "b", "3.45", "6.7"]
 
 
 
-## ignoreOutput operator
+### ignoreOutput operator
 
 - ignoreOutput operator는  completiion event만 받고 그 이외의 이벤트는 무시하고자 할 때 사용 가능합니다.
 
@@ -378,7 +378,7 @@ numbers
 
 
 
-## first, last operator
+### first, last operator
 
 - first operator는 Sequence의 첫번째 혹은 특정 조건에 맞는 첫번째 값을 방출할때 사용할 수 있습니다.
 - last operator는 Sequence의 마지막 혹은 특정 조건에 맞는 마지막 값을 방출할때 사용할 수 있습니다.
@@ -403,7 +403,7 @@ numbers.last(where: { $0 % 2 == 1 }) // 홀수인 마지막 값을 방출
 
 
 
-## dropFirst / dropWhile / dropUntilOutputFrom operator
+### dropFirst / dropWhile / dropUntilOutputFrom operator
 
 - dropFirst는 Sequence에서 최초 N개의 이벤트를 무시하고자 할때 사용할 수 있다.
 - dropWhile은 특정 조건을 충족하는 동안 이벤트를 무시하고자 할때 사용한다.
@@ -440,5 +440,273 @@ taps.drop(untilOutputFrom: isReady)
 	if n == 6 { isReady.send(()) } // isReady subject에서 이벤트를 방출 하는 시점 부터 taps subject로부터 이벤트를 받음
 	taps.send(n) // isReady가 이벤트를 방출한 이후부터 tap subject(publisher)는 이벤트를 방출, 구독 값 수신이 가능
 }
+~~~
+
+
+
+### prefix, prefixWhile
+
+- prefix operator는  Sequence의 첫번째부터 N개의 이벤트만 방출하도록 할때 사용합니다.
+- prefix(while:) operator는 특정 조건을 충족하지 않는 이벤트가 나오기 전까지의 prefix event를 방출합니다.
+
+~~~swift
+// MARK: 33. prefix(_:), prefix(while:) operator
+let numbers = (1...10).publisher
+print("What is the prefix operator in Combine framework?")
+numbers
+	.prefix(3) // 첫번째 부터 3개의 이벤트만 방출
+	.sink { element in
+		print(element) // 1, 2, 3
+	}
+
+numbers
+	.prefix(while: { $0 % 3 != 0 }) // 3으로 나눈 나머지가 3이 아닌 동안 방출
+	.sink {
+    print($0) // 1, 2
+  }
+~~~
+
+
+
+### 🐵 operator exercise2
+
+- Challenge: Filter all the things with solution (dropFirst + prefix + filter)
+
+~~~swift
+/*
+Challenge: Filter all the things
+
+Create an example that publishes a collection of numbers from 1 through 100, and use filtering operators to:
+
+1. Skip the first 50 values emitted by the upstream publisher.
+2. Task the next 20 values after those first 50 values.
+3. Only task even numbers.
+
+The output of your example should produce the follwing numbers, one per line:
+*/
+
+let publisher = (1...100).publisher
+publisher
+  .dropFirst(50) // or, drop(while: { $0 <= 50 }), 1) 처음 50개의 이벤트는 무시합니다.
+  .prefix(20) // 50개 이벤트 버린 후, 처음 20개의 이벤트는 방출합니다.
+  .filter({ $0 & 1 == 0 }) // 방출하는 20개 이벤트 중, 짝수만 방출합니다.
+  .sink(receiveValue: {
+    print($0)
+  })
+~~~
+
+
+
+### prepend, append operator
+
+- prepend
+  - prepend operator는 append의 반대로 Sequence 앞에 이벤트를 추가시킬 때 사용합니다.
+  - Sequence publisher를 인자로 넣어서 사용할 수도 있습니다.
+
+~~~swift
+// MARK: 36. preappend operator
+let numbers = (1...5).publisher
+let publisher2 = (500...510)
+let publisher3 = [0].publisher
+numbers
+	.prepend(-20, -30) // -20, -30, 1, 2, 3, 4, 5
+	.prepend(100, 200, 300) // 100, 200, 300, -20, -30, 1, 2, 3, 4, 5
+	.prepend(publisher2) // 500, 501, ... 510, 100, 200, 300, -20, -30, 1, 2, 3, 4, 5
+	.prepend(publisher3) // 0, 500, 501, ... 510, 100, 200, 300, -20, -30, 1, 2, 3, 4, 5
+	.sink {
+		print($0) // 0, 500, 501, ... 510, 100, 200, 300, -20, -30, 1, 2, 3, 4, 5
+  }
+~~~
+
+
+
+- append
+  - append operator는 prepend와 반대로 Sequence 끝에 이벤트를 추가할 때 사용합니다.
+  - prepend처럼 다른 publisher를 append operator 인자로 사용 가능합니다.
+
+~~~swift
+// MARK: 37. append operator
+et numbers = (1...10).publisher
+let publisher2 = (100...101).publisher
+let publisher3 = [-1].publisher
+numbers
+  .append(99, 98, 97)
+  .append(-30, -20, -10)
+  .append(publisher2)
+  .append(publisher3)
+  .sink {
+  print($0)
+}
+~~~
+
+
+
+### switchToLatest operator
+
+- PassthroughSubject를  Output으로 갖고 있는 A Subject가 있다고 보자, 해당  subject에  switchToLatest를 사용하면, 이후, A Subject가 가장 최근에 방출한 PassthroughSubject에 대한 이벤트만 수신 받을 수 있다.
+
+~~~swift
+// MARK: 38. switchToLatest operator
+// switchToLatest operator는 가장 최근 방출한 publisher에 대한 이벤트를 받고자할때 사용합니다.
+// ex) 가장 최근에 publisherA 이벤트 방출했다면, publisherA가 방출한 이벤트만 받는다.
+let publisher = PassthroughSubject<String, Never>()
+let publisher2 = PassthroughSubject<String, Never>()
+let publishers = PassthroughSubject<PassthroughSubject<String, Never>, Never>()
+publishers.switchToLatest().sink {
+  print($0)
+}
+
+// publisher를 방출하면 publisher가 방출하는 이벤트만 수신 가능하다.
+publisher.send("Publisher - A")
+publishers.send(publisher) // switching to publisher
+publisher.send("Publisher - B")
+publishers.send(publisher2)
+// publishers가 가장 최근에 publisher2를 방출했으므로 publisher2가 아닌 publisher에서 방출된 이벤트는 수신하지 못한다.
+publisher.send("Publisher - C") // switcing to publisher2
+// publishers에서 가장 최근 방출된 publisher2에 대한 이벤트를 수신 가능하다.
+publisher2.send("Publisher2 - A")
+publisher2.send("Publisher2 - B")
+
+~~~
+
+
+
+### switchToLatest operator usecase
+
+~~~swift
+// MARK: 39. switchToLatest continued
+// switchToLatest operator에 대한 실 사용 예시를 알아보자.
+// switchToLatest operator를 활용하면 버튼을 탭하고, 탭 이벤트 이후 이미지를 요청해서 받아올때, 가장 최근에 선택한 index(상태)에 대한 이미지를 불러올 수 있다.
+let images = ["Houston", "Denver", "Seattle"]
+var index = 0
+
+func getImage() -> AnyPublisher<UIImage?, Never> {
+  print("getImage calling")
+  return Future<UIImage?, Never> { promise in // future를 사용하면 클로져 내에서 결과값을 방출할 수 있다.
+    print("getImage promise closure")
+    DispatchQueue.global().asyncAfter(deadline: .now() + 3.0) {
+      print("image callback fired")
+      promise(.success(UIImage(named: images[index]))) // 비동기적으로 약 3초 후 선택된 인덱스에 맞는 이미지를 콜백으로 전달한다.
+    }
+  } // -> Future<UIImage?, Never>
+  .map { $0 } // -> UIImage?
+  .receive(on: RunLoop.main)
+  .eraseToAnyPublisher() // -> AnyPublisher<UIImage?, Never>
+}
+
+let taps = PassthroughSubject<Void, Never>() // 버튼 탭 예시로 사용되는 subject publisher
+let subscription = taps.map { _ in getImage() }
+  .print()
+  .switchToLatest().sink {
+    print($0)
+  }
+
+// getImage 메서드는 3초뒤 이미지를 전달한다.
+
+// 1) houston index(0)일때는 바로 이벤트를 보낸다. 3초 뒤, index는 그대로 0이므로 houston에 대한 이미지를 받는다.
+taps.send() // tap action
+// => 3초 뒤 0번째 인덱스의 이미지를 받음
+// 2) 이후 6초 뒤에 실행되는 비동기 코드
+DispatchQueue.main.asyncAfter(deadline: .now() + 6.0, execute: {
+  // 3) 6초 뒤, index += 1 후 index는 1이 된다.
+  // 4) 이어서 tap 이벤트가 발생한다. 3초 뒤 이미지를 받을 것이다. 이어서 아래 DispatchQueue 동작이 곧바로 실행된다.
+  index += 1
+  taps.send()
+})
+
+// seattle index(2)일때는 6.5초 뒤에 이벤트를 보낸다.
+DispatchQueue.main.asyncAfter(deadline: .now() + 6.5, execute: {
+  // 5) 6.5초 뒤 index가 한번더 증가한다. index == 2 이다.
+  // 6) 4)에서 발생한 tap 이벤트에 대한 getImage 콜벡을 수신한다. 이때 index는 2이므로, Denver가 아닌 Seattle에 대한 이미지를 받게된다.
+  // => index가 1인 시점에서 getImage 메서드를 호출했지만, image 콜벡을 받는 3초 동안 이미 index가 2로 바뀌었기 때문에, index == 2 이미지인 Seattle 이미지를 이벤트로 받게 된다.
+  //
+  index += 1
+  taps.send()
+})
+
+// Denver에 대한 이미지 요청은 6초 이후 전달되었지만, 추가로 3초 후 이미지가 전달 되기 전에 index가 다시 증가하여 Seattle에 대한 index가 되었으므로
+// Denver가 아닌 최근 index에 대한 이미지인 Seattle 이미지를 받게 된다. 이처럼 switchToLatest operator는 가장 최근 상태에 대한 이벤트를 받고 싶을때 사용할 수 있다.
+~~~
+
+
+
+### merge operator
+
+- merge operator는 여러개의 publisher를 합칠 수 있고, 시간 순으로 합친 publisher들의 이벤트를 받을 수 있다.
+
+~~~swift
+// MARK: 40. merge operator
+let publisher1 = PassthroughSubject<Int, Never>()
+let publisher2 = PassthroughSubject<Int, Never>()
+publisher1.merge(with: publisher2).sink {
+	print($0)
+}
+
+// merge로 합친 여러개의 subject publisher에 대한 이벤트를 시간 순으로 수신할 수 있다.
+publisher1.send(1)
+publisher1.send(2)
+
+publisher2.send(4)
+publisher2.send(5)
+publisher2.send(6)
+
+publisher1.send(7)
+publisher1.send(8)
+~~~
+
+
+
+### combineLatest operator
+
+- combineLatest는 RxSwift의 동일 이름 연산자와 동작이 모두 유사하다.
+- publisher들의 가장 최근 값들을 방출한다. (최소 한번씩은 방출이 되어야 쌍으로 방출이 됨)
+
+~~~swift
+// MARK: 41. combineLatest operator
+// combineLatest는 RxSwift와 이름 동작이 모두 유사합니다.
+// 1) 두개의 publisher 최신 값을 이벤트로 방출합니다.
+// 2) 둘 중 어느 하나의 이벤트가 방출될때마다 각 publisher의 최신값을 방출합니다.
+// 3) 서로 다른 값 타입의 publisher들에 대해서도 combineLatest operator를 사용하여 최신 이벤트를 전달받을 수 있습니다.
+let publisher1 = PassthroughSubject<Int, Never>()
+let publisher2 = PassthroughSubject<String, Never>()
+publisher1.combineLatest(publisher2)
+  .sink {
+    print("P1: \($0), P2: \($1)")
+  }
+publisher1.send(1) // nothing
+publisher1.send(2) // nothing
+
+publisher2.send("A") // 2, "A"
+publisher2.send("B") // 2, "B"
+
+publisher1.send(3) // 3, "B"
+~~~
+
+
+
+### zip operator
+
+- zip operator는 각각의 publisher에 대한 동일 순서의 이벤트를 튜플로 묶어서 방출합니다.
+- 만약 동일 순서의 이벤트 쌍을 맞추지 못한다면, 방출되지 않습니다.
+
+~~~swift
+// MARK: 41. combineLatest operator
+// combineLatest는 RxSwift와 이름 동작이 모두 유사합니다.
+// 1) 두개의 publisher 최신 값을 이벤트로 방출합니다.
+// 2) 둘 중 어느 하나의 이벤트가 방출될때마다 각 publisher의 최신값을 방출합니다.
+// 3) 서로 다른 값 타입의 publisher들에 대해서도 combineLatest operator를 사용하여 최신 이벤트를 전달받을 수 있습니다.
+let publisher1 = PassthroughSubject<Int, Never>()
+let publisher2 = PassthroughSubject<String, Never>()
+publisher1.combineLatest(publisher2)
+  .sink {
+    print("P1: \($0), P2: \($1)")
+  }
+publisher1.send(1) // nothing
+publisher1.send(2) // nothing
+
+publisher2.send("A") // 2, "A"
+publisher2.send("B") // 2, "B"
+
+publisher1.send(3) // 3, "B"
 ~~~
 
