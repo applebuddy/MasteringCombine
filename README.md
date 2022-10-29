@@ -873,6 +873,7 @@ func getPosts() -> AnyPublisher<Data, URLError> {
 
   return URLSession.shared.dataTaskPublisher(for: url) // -> DataTaskPublisher
     .map { $0.data } // -> DataTaskPublisher의 Output 중 data로 맵핑
+  	.decode(type: [Post].self, decoder: JSONDecoder()) // 특정 타입으로 decoding 가능
     .eraseToAnyPublisher() // 구독이 가능한 AnyPublisher 타입으로 반환된다.
 }
 
@@ -890,9 +891,9 @@ let cancellable = getPosts().sink(receiveCompletion: { _ in
 ### Timer using Combine
 
 - 다양한 방법으로 타이머를 구현할 수 있습니다.
-  - RunLoop
-  - DispatchQueue
-  - Timer
+  - RunLoop.schedule (Cancellable 타입으로 관리)
+  - DispatchQueue.main.achedule (Cancellable 타입으로 관리)
+  - Timer.publish (TimerPublisher를 반환하면 구독 시 반환되는 AnyCancellable 타입으로 관리)
 - RunLoop (runLoop.schedule)
 
 ~~~swift
@@ -997,5 +998,183 @@ class MyViewController : UIViewController {
       print($0)
     }
   }
+~~~
+
+
+
+### breakpoint operator
+
+~~~swift
+// MARK: 55. Using debugger with Combine
+// breakpoint operator는 특정 조건이 충족될때 디버깅모드로 진입할 수 있습니다. breakpoint처럼 디버깅에 사용할 수 있습니다.
+import UIKit
+import Combine
+
+class ViewController: UIViewController {
+  
+  private var cancellable: AnyCancellable?
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    let publisher = (1...10).publisher
+    self.cancellable = publisher
+      .breakpoint(receiveOutput: { value in
+        return value > 9 // value가 9를 초과하게 되면 break point가 걸리며 디버깅모드로 진입할 수 있다.
+      })
+      .sink {
+      print($0)
+    }
+  }
+}
+~~~
+
+
+
+
+
+### Section 10. Resources in Combine
+
+~~~swift
+ // MARK: - Section 10. Resources in Combine
+  // MARK: 59. Understanding the problem
+  private func understandingTheProblem_59() {
+    guard let url = URL(string: "https://jsonplaceholder.typicode.com/posts") else {
+      fatalError("Invalid URL")
+    }
+    
+    let request = URLSession.shared.dataTaskPublisher(for: url)
+      .map(\.data) // KeyPath를 통해 response빼고 data만 down stream에 넘길 수 있다. (다수의 KeyPath를 지정할 수도 있음.)
+      .print() // print operator로 stream 동작상태를 확인할 수 있습니다.
+    
+    // subscription1, 2가 동일한 데이터를 받아온다. 동일한 결과값을 공유하지 않고 각자 구독하여 받고 있다. 이는 중복 작업으로 비효율적이다. 이러한 문제를 해결할 방법이 무엇이 있을까? share operator로 해결할 수 있다.
+    subscription1 = request.sink(receiveCompletion: { _ in }, receiveValue: {
+      print($0)
+    })
+    
+    subscription2 = request.sink(receiveCompletion: { _ in }, receiveValue: {
+      print($0)
+    })
+  }
+~~~
+
+
+
+### share, multicast operator
+
+- share operator
+  - share operator를 사용하면 해당 publisher에 대한 이벤트를 다수의 구독자가 공유하여 중복 작업 문제를 해결할 수 있다.
+
+~~~swift
+// MARK: - Section 10. Resources in Combine
+// MARK: 59. Understanding the problem
+// MARK: 60. share operator
+// MARK: 61. multicast operator
+// 'How can we share the results of a publisher?'
+// -> share operator를 사용하면 동일 publisher에 대한 구독 이벤트를 다수의 구독자가 공유하여 불필요한 중복 작업을 방지할 수 있다.
+private func understandingTheProblem_59() {
+  guard let url = URL(string: "https://jsonplaceholder.typicode.com/posts") else {
+    fatalError("Invalid URL")
+  }
+  
+  let request = URLSession.shared.dataTaskPublisher(for: url)
+    .map(\.data) // KeyPath를 통해 response빼고 data만 down stream에 넘길 수 있다.
+    .print() // print operator로 stream 동작상태를 확인할 수 있습니다.
+    .share() // * share operator를 사용하면 해당 publisher에 대한 이벤트를 다수의 구독자가 공유하여 중복 작업 문제를 해결할 수 있다.
+    
+    // subscription1, 2가 동일한 데이터를 받아온다. 이는 중복 작업으로 비효율적이다. 이러한 문제를 해결할 방법이 무엇이 있을까? share operator로 해결할 수 있다.
+  subscription1 = request.sink(receiveCompletion: { _ in }, receiveValue: {
+    print("Subscription 1")
+    print($0)
+  })
+  
+  subscription2 = request.sink(receiveCompletion: { _ in }, receiveValue: {
+    print("Subscription 2")
+    print($0) // share() operator를 사용했을 경우, 두번째 구독자는 이미 앞서 처리된 데이터를 공유하여 중복 작업을 하지 않게 됩니다.
+  })
+
+  self.subscription3 = request.sink(receiveCompletion: { _ in }, receiveValue: {
+    print("Subscription 3")
+    print($0)
+  })
+  
+  let cancellable = request.connect()
+}
+~~~
+
+
+
+- multicast operator
+  - multicase operator의 인자로 지정한  Publisher의 값을 해당  operator를 사용한  publisher 구독자 전원에게 동일하게 뿌려줄 수있다.
+
+~~~swift
+// MARK: - Section 10. Resources in Combine
+// MARK: 59. Understanding the problem
+// MARK: 60. share operator
+// MARK: 61. multicast operator
+// 'How can we share the results of a publisher?'
+// -> share operator를 사용하면 동일 publisher에 대한 구독 이벤트를 다수의 구독자가 공유하여 불필요한 중복 작업을 방지할 수 있다.
+private func understandingTheProblem_59() {
+  guard let url = URL(string: "https://jsonplaceholder.typicode.com/posts") else {
+    fatalError("Invalid URL")
+  }
+  
+  let request = URLSession.shared.dataTaskPublisher(for: url)
+    .map(\.data) // KeyPath를 통해 response빼고 data만 down stream에 넘길 수 있다.
+    .print() // print operator로 stream 동작상태를 확인할 수 있습니다.
+    .multicast(subject: self.subjectToMulticast) // multicast operator를 사용하면 해당 publisher를 구독하는 구독자들이 동일한 subject값을 전달받을 수 있게 된다.
+//      .share() // * share operator를 사용하면 해당 publisher에 대한 이벤트를 다수의 구독자가 공유하여 중복 작업 문제를 해결할 수 있다.
+    
+    // subscription1, 2가 동일한 데이터를 받아온다. 이는 중복 작업으로 비효율적이다. 이러한 문제를 해결할 방법이 무엇이 있을까? share operator로 해결할 수 있다.
+  subscription1 = request.sink(receiveCompletion: { _ in }, receiveValue: {
+    print("Subscription 1")
+    print($0)
+  })
+  
+  subscription2 = request.sink(receiveCompletion: { _ in }, receiveValue: {
+    print("Subscription 2")
+    print($0) // share() operator를 사용했을 경우, 두번째 구독자는 이미 앞서 처리된 데이터를 공유하여 중복 작업을 하지 않게 됩니다.
+  })
+
+  self.subscription3 = request.sink(receiveCompletion: { _ in }, receiveValue: {
+    print("Subscription 3")
+    print($0)
+  })
+  
+  let cancellable = request.connect()
+  // multicast operator로 지정한 subject를 통해 request 구독자들에게 동일한 데이터를 전달할 수 있다.
+  self.subjectToMulticast.send(Data())
+}
+~~~
+
+
+
+### Combine Publisher, Operator, Subscriber를 사용하여 날씨 정보를 조회하는 API 사용하기
+
+~~~swift
+// MARK: 65. Implementing Webservice
+import Foundation
+import Combine
+
+final class WebService {
+  func fetchWeather(city: String) -> AnyPublisher<Weather, Error> {
+    // Constants의 타입 프로퍼티를 사용하여 weather 관련 URL 주소를 생성
+    guard let url = URL(string: Constants.URLs.weather) else {
+      fatalError("Invalid URL !!")
+    }
+    
+		// 1) dataTaskPublisher를 통해 data, response를 가진 URLSession.DataTaskPublisher 를 반환
+    // 2) map은 keyPath를 통해 특정 변수만 남기도록 맵핑이 가능하다.
+    // 3) decode로 특정 decoder를 이용해서 디코딩을 할 수 있다.
+    // 4) 디코딩 결과에서 main만 남기는 모습
+    // 5) receive(on:)으로 특정 thread에서 동작하돌고 지정할 수 있다. UI를 다루는 코드에 사용되므로 main thread에서 동작하도록 한다.
+    // 6) 데이터의 내부적인 연산과정은 숨기고, 최종 결과형태만 받아서 구독 가능하도록 eraseToAnyPublisher()로 반환하고 있다.
+    return URLSession.shared.dataTaskPublisher(for: url)
+      .map(\.data)
+      .decode(type: WeatherResponse.self, decoder: JSONDecoder())
+      .map { $0.main }
+      .receive(on: RunLoop.main) // main thread에서 동작하도록 합니다.
+      .eraseToAnyPublisher() // 최종적인 형태로 데이터를 전달할때 eraseToAnyPublisher를 사용할 수 있다.
+  }
+}
 ~~~
 
