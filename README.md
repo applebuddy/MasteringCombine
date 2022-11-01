@@ -1178,3 +1178,63 @@ final class WebService {
 }
 ~~~
 
+
+
+### throttle, debounce operator
+
+- reference : https://felix-mr.tistory.com/10
+
+- throttle operator
+  - 연속 호출 시, 지정된 시간간격을 지나고 나서 최초 값 혹은 latest 값을 publish 한다.
+  - 중복 처리, 중복 이벤트를 방지하고자 할때 사용할 수 있다. 이벤트 호출 후 특정 시간동안 동일 이벤트가 발생하기 원치 않을 경우 사용할 수 있다.
+  - latest 옵션에 따라, 특정 시간이 지나고 publish 될 이벤트 기준을 바꿀 수 있다. (latest옵션이 false면 초기 이벤트 기준,  true면 가장 최근 이벤트 기준)
+  - ex) 버튼에  throttleTap을 적용, 단기간에 여러번 터치가 될 경우, 한번만 허용할 수 있다.
+- debounce operator
+  - 이벤트 발생 후 일정 시간 지켜본 후 트리거를 한다. 트리거 전에 이벤트가 발생하면 이전 이벤트는 무효화 한다. 
+  - 자동검색 등, 한글자 한글자 입력할때 API를 호출하지 않고, 타자가 멈춘 후, 일정 시간이 지날때 자동검색 결과를 보이도록 할 수 있다.
+  - ex) 자동검색 기능
+
+~~~swift
+// MARK: combine debounce operator example
+final class DebounceViewModel {
+  // TextField에 입력받은 텍스트에 대한 정보를 받는 text subject
+  private(set) var text = PassthroughSubject<String?, Never>()
+  private(set) var result = PassthroughSubject<String, Never>()
+  
+  ... 생략 ...
+}
+
+private extension DebounceViewModel {
+  
+  private func bind() {
+    // text가 입력 후, 0.5초간 추가적인 이벤트가 있으면 이전 이벤트는 무시된다.
+    // text 입력 후, 0.5초간 추가적인 이벤트가 없을 경우, down stream 이벤트가 trigger된다.
+    text
+      .debounce(for: 0.5, scheduler: RunLoop.main)
+      .compactMap { $0 }
+      .sink { self.result.send($0) }
+      .store(in: &cancellables)
+  }
+}
+~~~
+
+~~~swift
+// MARK: Combine throttle operator example
+final class ThrottleViewModel {
+
+  private(set) var touchEvent = PassthroughSubject<Int, Never>()
+  @Published private(set) var count = 0
+  
+  ... 생략 ...
+}
+
+private extension ThrottleViewModel {
+  func bind() {
+    touchEvent
+    	.throttle(for: 1, scheduler: RunLoop.main, latest, latest: false)
+    	.sink { self.count += $0 }
+    	.store(in: &cancellables)
+  }
+}
+~~~
+
