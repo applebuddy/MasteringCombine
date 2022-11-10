@@ -14,6 +14,7 @@
 		07140FD9291D5A1300F415AD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07140FD8291D5A1300F415AD /* Assets.xcassets */; };
 		07140FDC291D5A1300F415AD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07140FDA291D5A1300F415AD /* LaunchScreen.storyboard */; };
 		07140FE4291D5AE100F415AD /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07140FE3291D5AE100F415AD /* UIButton+Extension.swift */; };
+		07140FE6291D637600F415AD /* UITapGesture+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07140FE5291D637600F415AD /* UITapGesture+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		07140FDB291D5A1300F415AD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		07140FDD291D5A1300F415AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		07140FE3291D5AE100F415AD /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
+		07140FE5291D637600F415AD /* UITapGesture+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITapGesture+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 				07140FD1291D5A1100F415AD /* SceneDelegate.swift */,
 				07140FD3291D5A1100F415AD /* ViewController.swift */,
 				07140FE3291D5AE100F415AD /* UIButton+Extension.swift */,
+				07140FE5291D637600F415AD /* UITapGesture+Extension.swift */,
 				07140FD5291D5A1100F415AD /* Main.storyboard */,
 				07140FD8291D5A1300F415AD /* Assets.xcassets */,
 				07140FDA291D5A1300F415AD /* LaunchScreen.storyboard */,
@@ -142,6 +145,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				07140FD4291D5A1100F415AD /* ViewController.swift in Sources */,
+				07140FE6291D637600F415AD /* UITapGesture+Extension.swift in Sources */,
 				07140FE4291D5AE100F415AD /* UIButton+Extension.swift in Sources */,
 				07140FD0291D5A1100F415AD /* AppDelegate.swift in Sources */,
 				07140FD2291D5A1100F415AD /* SceneDelegate.swift in Sources */,

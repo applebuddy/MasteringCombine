@@ -11,19 +11,30 @@ import Combine
 class ViewController: UIViewController {
 
   @IBOutlet weak var centerButton: UIButton!
+  @IBOutlet weak var centerLabel: UILabel!
   private var cancellables = Set<AnyCancellable>()
-  private var tapCount = 0
+  private var buttonTapCount = 0
+  private var labelTapCount = 0
 
   override func viewDidLoad() {
     super.viewDidLoad()
     centerButton.throttleTapPublisher()
       .map { [weak self] _ in
-        self?.tapCount += 1
-        return "throttleTap count : \(self?.tapCount ?? 0)"
+        self?.buttonTapCount += 1
+        return "throttleTap count : \(self?.buttonTapCount ?? 0)"
       }
       .sink { [weak self] title in
         self?.centerButton.setTitle(title, for: .normal)
       }
+      .store(in: &cancellables)
+    
+    centerLabel.isUserInteractionEnabled = true
+    centerLabel.throttleTapGesturePublisher()
+      .map { [weak self] _ in
+        self?.labelTapCount += 1
+        return "throttleTap count : \(self?.labelTapCount ?? 0)"
+      }
+      .assign(to: \.text, on: centerLabel)
       .store(in: &cancellables)
   }
 }

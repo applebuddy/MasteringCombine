@@ -27,23 +27,36 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="throttleTap count : 0"/>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="throttleTap count : 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SaM-K0-Qtg">
+                                <rect key="frame" x="20" y="348" width="374" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="dja-qn-jI1"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="SaM-K0-Qtg" secondAttribute="trailing" constant="20" id="3Ow-7N-zQb"/>
+                            <constraint firstItem="Yyq-Y4-FRc" firstAttribute="top" secondItem="SaM-K0-Qtg" secondAttribute="bottom" constant="30" id="CeG-Nk-5BS"/>
                             <constraint firstItem="Yyq-Y4-FRc" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="Fr8-AO-zDE"/>
                             <constraint firstItem="Yyq-Y4-FRc" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="MLt-jr-u5X"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Yyq-Y4-FRc" secondAttribute="trailing" constant="20" id="MxW-aW-USj"/>
                             <constraint firstItem="Yyq-Y4-FRc" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="XSh-9A-rBs"/>
+                            <constraint firstItem="SaM-K0-Qtg" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="i56-I0-K1C"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="centerButton" destination="Yyq-Y4-FRc" id="oLC-UR-UbY"/>
+                        <outlet property="centerLabel" destination="SaM-K0-Qtg" id="0I7-86-jjd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="20" y="98"/>
+            <point key="canvasLocation" x="18.840579710144929" y="97.767857142857139"/>
         </scene>
     </scenes>
     <resources>
