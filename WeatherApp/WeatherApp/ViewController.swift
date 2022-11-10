@@ -23,6 +23,7 @@ class ViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     setupPublishers()
+
     /*
     self.cancellable = self.webService.fetchWeather(city: "Houston")
       .catch { _ in Just(Weather.placeholder) } // 에러 발생 시, placeholder Data를 넘깁니다.

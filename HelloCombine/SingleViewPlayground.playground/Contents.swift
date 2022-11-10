@@ -34,7 +34,7 @@ class MyViewController : UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.retrievingTopStoryIDs_87()
+    self.usingTimerClass_57()
   }
   
   // MARK: - Section 15. Hacker News - SwiftUI, Combine and Web API
@@ -78,7 +78,7 @@ class MyViewController : UIViewController {
     
     subscription2 = request.sink(receiveCompletion: { _ in }, receiveValue: {
       print("Subscription 2")
-      print($0) // 두번째 구독자는 이미 앞서 처리된 데이터를 공유하여 중복 작업을 하지 않게 됩니다.
+      print($0) // share() operator를 사용했을 경우, 두번째 구독자는 이미 앞서 처리된 데이터를 공유하여 중복 작업을 하지 않게 됩니다.
     })
 
     self.subscription3 = request.sink(receiveCompletion: { _ in }, receiveValue: {
@@ -89,6 +89,7 @@ class MyViewController : UIViewController {
     let cancellable = request.connect()
     // multicast operator로 지정한 subject를 통해 request 구독자들에게 동일한 데이터를 전달할 수 있다.
     self.subjectToMulticast.send(Data())
+    cancellable.cancel()
   }
   
   // MARK: 58. Using DispatchQueue
@@ -96,7 +97,7 @@ class MyViewController : UIViewController {
   // DispatchQueue 를 통해 타이머 기능을 구현할 수 있습니다.
   private func usingDispatchQueue_58() {
     // RunLoop에서 처럼, 메모리에서 holding 할 수 있도록 timer실행 코드에 대한 할당을 해야 정상 동작이 됩니다.
-    /*
+    // Dispatch.main.schedule로 타이머 기능 사용 가능
     timerSubscription = queue.schedule(
       after: queue.now,
       interval: .seconds(1)
@@ -115,7 +116,6 @@ class MyViewController : UIViewController {
       }
       print($0)
     }
-     */
   }
   
   // MARK: 57. Timer class
@@ -123,7 +123,7 @@ class MyViewController : UIViewController {
   // * autoconnect() : upstream connectable publisher에 자동적으로 연결을 시켜주는 메서드이다.
   private func usingTimerClass_57() {
     // 1초마다 메인스레드에서 타이머를 동작 시킨다.
-    /*
+    
     cancellable = Timer.publish(every: 1.0, on: .main, in: .common)
       .autoconnect()
       .scan(0) { counter, _ in
@@ -132,7 +132,6 @@ class MyViewController : UIViewController {
       .sink { value in
         print("Timer Fired! \(value)")
       }
-     */
   }
   
   // MARK: - Section 9. Combine Timers

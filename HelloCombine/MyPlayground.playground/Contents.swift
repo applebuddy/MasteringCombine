@@ -1,5 +1,11 @@
 import UIKit
 import Combine
+import Darwin
+
+let publisher = (1...8).publisher.collect(3).sink {
+  print($0)
+}
+
 
 // MARK: 79. What is Binding?
 // View와 ViewModel을 묶는 것을 Binding이라고 한다. SwiftUI는 Binding을 제공한다.
