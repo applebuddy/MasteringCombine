@@ -17,7 +17,9 @@ extension UIControl {
         latest: false
       )
   }
-  
+}
+
+extension UIControl {
   struct GesturePublisher<Control: UIControl>: Publisher {
     typealias Output = Control
     typealias Failure = Never
@@ -39,9 +41,11 @@ extension UIControl {
       subscriber.receive(subscription: subscription)
     }
   }
-  
+}
+
+extension UIControl {
   final class GestureSubscription<S: Subscriber, Control: UIControl>: Subscription
-  where S.Input == Control {
+    where S.Input == Control {
     private var subscriber: S?
     private let control: Control
     

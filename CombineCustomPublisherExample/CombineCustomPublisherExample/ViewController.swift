@@ -19,6 +19,7 @@ class ViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     centerButton.throttleTapPublisher()
+      .receive(on: RunLoop.main)
       .map { [weak self] _ in
         self?.buttonTapCount += 1
         return "throttleTap count : \(self?.buttonTapCount ?? 0)"
@@ -30,6 +31,7 @@ class ViewController: UIViewController {
     
     centerLabel.isUserInteractionEnabled = true
     centerLabel.throttleTapGesturePublisher()
+      .receive(on: RunLoop.main)
       .map { [weak self] _ in
         self?.labelTapCount += 1
         return "throttleTap count : \(self?.labelTapCount ?? 0)"
@@ -38,4 +40,3 @@ class ViewController: UIViewController {
       .store(in: &cancellables)
   }
 }
-
