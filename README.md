@@ -1,6 +1,8 @@
 # MasteringCombine
 Study for Udemy lecture; The Complete Guide to Combine Framework in iOS Using Swift
 * Lecture URL (udemy) : https://www.udemy.com/course/the-complete-guide-to-combine-framework-in-ios-using-swift/
+* 강의 완강 후, 학습 내용 토대로 스터디 진행
+  - [스터디 공용 git repository 링크](https://github.com/iOS-Udemy-Study-Group/Hello-Combine-with-Udemy)
 
 <div>
 
