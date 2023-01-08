@@ -29,6 +29,7 @@ class Webservice {
     // 첫번째 id에 대한 데이터를 요청하는 AnyPublisher부터 해서 다른 id에 대한 AnyPublisher까지 merge를 진행한다.
     // merge는 merge된 publisher에 대한 이벤트들을 시간순으로 동작할때 사용할 수 있다.
     return remainder.reduce(initialPublisher) { combined, id in
+      // 첫번째 Story Output을 시작으로, ~50번째까지의 Story를 시간순으로 처리하여 시퀀스 방출, 이를 eraseToAnyPublisher로 타입을 숨겨서 반환
       return combined
         .merge(with: getStoryById(storyId: id))
         .eraseToAnyPublisher()
@@ -49,7 +50,7 @@ class Webservice {
       }.scan([]) { stories, story -> [Story] in  // scan을 통해, ids에 대한 Story 데이터가 처리되어 누적될때마다, 이벤트를 방출할 수 있다.
         return stories + [story] // View에 보여지는 stories데이터에 flatMap을 통해 처리되는 story를 누적
       }
-      .receive(on: RunLoop.main)
+      .receive(on: RunLoop.main) // receive(on:)은 down stream에 한하여 지정된 thread의 동작을 보장한다.
       .eraseToAnyPublisher()
   }
 }
